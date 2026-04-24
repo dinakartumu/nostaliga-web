@@ -1,0 +1,132 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Support — Nostaliga"
+  description="Getting help with Nostaliga: contact, FAQs, and how to reset the app."
+  path="/support"
+>
+  <article class="pt-16">
+    <h1 class="text-4xl sm:text-5xl" style="font-family: var(--font-display);">
+      Support
+    </h1>
+    <p class="mt-6 max-w-2xl text-[color:var(--color-ink-dim)]">
+      The fastest way to get help is email. Include your iOS version, the
+      integration you were using, and a short description of what happened.
+    </p>
+
+    <div class="mt-10 rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6">
+      <h2 class="text-2xl" style="font-family: var(--font-display);">Email</h2>
+      <p class="mt-2 text-[color:var(--color-ink-dim)]">
+        <a href="mailto:dinakar@pageloop.ai?subject=Nostaliga%20support"
+          >dinakar@pageloop.ai</a
+        >
+      </p>
+      <p class="mt-2 text-sm text-[color:var(--color-ink-dim)]">
+        Usual response time: within 2 business days.
+      </p>
+    </div>
+
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Frequently asked
+    </h2>
+
+    <div class="mt-6 space-y-8 text-[color:var(--color-ink-dim)]">
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          How do I connect Spotify / Last.fm / Trakt / Swarm / Strava / Lightroom?
+        </h3>
+        <p class="mt-2">
+          Open Settings → Integrations, tap the service, and follow the OAuth
+          flow. You'll be redirected back to Nostaliga once you authorize. A
+          green check appears next to the service when connection is complete.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          I connected a service but nothing is showing up.
+        </h3>
+        <p class="mt-2">
+          Pull to refresh on the main timeline. Background sync also runs
+          periodically — open the app once and give it a few minutes on the
+          first connection for an initial import.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          Background sync isn't running.
+        </h3>
+        <p class="mt-2">
+          iOS controls the schedule — background tasks run when the system
+          decides it's a good time (battery, network, usage patterns).
+          Keeping Background App Refresh on for Nostaliga in
+          <em>iOS Settings → General → Background App Refresh</em> increases
+          how often it runs.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          How do I reset the app?
+        </h3>
+        <p class="mt-2">
+          Settings → Privacy → Delete All Data. This removes the on-device
+          database, every OAuth token, every cached file, and every
+          preference. Use this before uninstalling if you want a clean slate.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          Does my data leave the device?
+        </h3>
+        <p class="mt-2">
+          Only when you explicitly ask Nostaliga to fetch history from a
+          third-party service you connected — those requests go directly to
+          that service. Matching, correlation, and rendering all happen
+          locally. See the
+          <a href="/privacy">Privacy Policy</a> for the complete breakdown.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          Does Nostaliga work on iPad and Mac?
+        </h3>
+        <p class="mt-2">
+          Yes — iPhone, iPad, and Mac (Apple Silicon). visionOS support is in
+          progress. HealthKit timelines are iPhone-only because HealthKit
+          itself is iPhone-only.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          I want to delete my Nostaliga account.
+        </h3>
+        <p class="mt-2">
+          There is no Nostaliga account to delete — Nostaliga has no server
+          and stores nothing about you. To remove every piece of local data,
+          tap Settings → Privacy → Delete All Data, then uninstall the app.
+          To cut off Nostaliga's access to a third-party service from that
+          service's side, visit the connected-apps settings on their site
+          (Spotify Apps, Strava My Apps, etc.) and revoke Nostaliga.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          Reporting a bug or requesting a feature.
+        </h3>
+        <p class="mt-2">
+          Email works best — describe what you did, what you expected, and
+          what happened. Screenshots help. A short screen recording is even
+          better. See the email address above.
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

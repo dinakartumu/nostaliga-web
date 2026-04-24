@@ -1,0 +1,77 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  path?: string;
+}
+
+const {
+  title,
+  description = "Nostaliga reconstructs your personal history — music, workouts, photos, and check-ins — on a single timeline. Everything stays on your device.",
+  path = "/",
+} = Astro.props;
+
+const canonical = new URL(path, Astro.site ?? "https://nostaliga.app");
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b0a0f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="mx-auto flex max-w-4xl items-center justify-between px-6 py-6">
+      <a
+        href="/"
+        class="font-display text-2xl text-[color:var(--color-ink)] hover:no-underline"
+        style="font-family: var(--font-display);"
+      >
+        Nostaliga
+      </a>
+      <nav class="flex items-center gap-6 text-sm text-[color:var(--color-ink-dim)]">
+        <a href="/privacy" class="hover:text-[color:var(--color-ink)]">Privacy</a>
+        <a href="/support" class="hover:text-[color:var(--color-ink)]">Support</a>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-4xl px-6 pb-24">
+      <slot />
+    </main>
+
+    <footer
+      class="mx-auto max-w-4xl border-t border-white/5 px-6 py-10 text-sm text-[color:var(--color-ink-dim)]"
+    >
+      <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <p>&copy; {year} Nostaliga. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="/privacy" class="hover:text-[color:var(--color-ink)]">Privacy</a>
+          <a href="/support" class="hover:text-[color:var(--color-ink)]">Support</a>
+          <a
+            href="mailto:dinakar@pageloop.ai"
+            class="hover:text-[color:var(--color-ink)]">Contact</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

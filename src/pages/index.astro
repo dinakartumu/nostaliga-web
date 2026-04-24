@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Nostaliga — a timeline of everything you've done"
+  path="/"
+>
+  <section class="pt-16 pb-24">
+    <p class="mb-6 text-sm uppercase tracking-[0.2em] text-[color:var(--color-ink-dim)]">
+      Coming soon to iPhone
+    </p>
+    <h1
+      class="text-5xl leading-tight sm:text-6xl md:text-7xl"
+      style="font-family: var(--font-display);"
+    >
+      Every song, every step, every place — on one timeline.
+    </h1>
+    <p class="mt-8 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
+      Nostaliga stitches together your listening history, workouts, photos, and
+      check-ins into a single scrollable memory. Everything stays on your
+      device.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a
+        href="mailto:dinakar@pageloop.ai?subject=Nostaliga%20TestFlight"
+        class="rounded-full bg-[color:var(--color-accent)] px-6 py-3 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
+      >
+        Request TestFlight access
+      </a>
+      <a
+        href="/privacy"
+        class="rounded-full border border-white/15 px-6 py-3 text-sm text-[color:var(--color-ink)] hover:no-underline hover:border-white/30"
+      >
+        How your data is handled
+      </a>
+    </div>
+  </section>
+
+  <section class="border-t border-white/5 py-20">
+    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
+      Brings your memory together from everywhere you already are.
+    </h2>
+    <div class="mt-12 grid gap-8 sm:grid-cols-2">
+      <div>
+        <h3 class="text-xl">Music</h3>
+        <p class="mt-2 text-[color:var(--color-ink-dim)]">
+          Apple Music, Spotify, and Last.fm — every track you've listened to,
+          when, and where.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl">Health</h3>
+        <p class="mt-2 text-[color:var(--color-ink-dim)]">
+          Workouts, walks, and sleep from HealthKit alongside the soundtrack
+          you had on.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl">Places</h3>
+        <p class="mt-2 text-[color:var(--color-ink-dim)]">
+          Swarm check-ins and Strava routes remember the venues and paths each
+          moment took.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl">Photos & words</h3>
+        <p class="mt-2 text-[color:var(--color-ink-dim)]">
+          On-device photo matching and your Twitter archive round out what you
+          actually saw and said.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-white/5 py-20">
+    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
+      Private by design.
+    </h2>
+    <ul class="mt-8 space-y-3 text-[color:var(--color-ink-dim)]">
+      <li>
+        <span class="text-[color:var(--color-ink)]">On-device matching.</span>
+        Photos, music, and health data are correlated locally — never uploaded.
+      </li>
+      <li>
+        <span class="text-[color:var(--color-ink)]">Keychain-only tokens.</span>
+        Every third-party OAuth token stays in the iOS Keychain on your device.
+      </li>
+      <li>
+        <span class="text-[color:var(--color-ink)]">No tracking.</span>
+        No analytics SDKs, no advertising identifier, no third-party trackers.
+      </li>
+      <li>
+        <span class="text-[color:var(--color-ink)]">One-tap delete.</span>
+        Settings → Privacy → Delete All Data wipes everything in a single
+        action.
+      </li>
+    </ul>
+  </section>
+</Layout>

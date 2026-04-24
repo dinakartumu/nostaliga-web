@@ -1,0 +1,208 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const lastUpdated = "April 24, 2026";
+---
+
+<Layout
+  title="Privacy Policy — Nostaliga"
+  description="How Nostaliga handles your data. Short answer: it stays on your device."
+  path="/privacy"
+>
+  <article class="prose-nostaliga pt-16">
+    <h1 class="text-4xl sm:text-5xl" style="font-family: var(--font-display);">
+      Privacy Policy
+    </h1>
+    <p class="mt-2 text-sm text-[color:var(--color-ink-dim)]">
+      Last updated {lastUpdated}
+    </p>
+
+    <p class="mt-8 text-[color:var(--color-ink-dim)]">
+      Nostaliga is built by Dinakar Tumu (contact: <a
+        href="mailto:dinakar@pageloop.ai">dinakar@pageloop.ai</a
+      >). This policy describes what Nostaliga does and does not do with your
+      data. It applies to the Nostaliga iOS, iPadOS, macOS, and visionOS apps
+      and to this website.
+    </p>
+
+    <h2 class="mt-12 text-2xl">The short version</h2>
+    <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
+      <li>
+        Nostaliga has no account system and no backend. We do not operate any
+        server that stores your data.
+      </li>
+      <li>
+        All matching, correlation, and display happens on your device.
+      </li>
+      <li>
+        The only data that leaves your device is the data you explicitly ask
+        Nostaliga to fetch from a third-party service you have connected. Those
+        requests go directly from your device to that service.
+      </li>
+      <li>
+        We do not use analytics, trackers, advertising identifiers, or
+        crash-reporting SDKs.
+      </li>
+    </ul>
+
+    <h2 class="mt-12 text-2xl">What Nostaliga accesses on your device</h2>
+    <ul class="mt-4 space-y-3 text-[color:var(--color-ink-dim)]">
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Photo library</strong>
+        (with your permission) — to surface photos near the timestamps of
+        songs, workouts, and places. Photo matching happens on-device. Photos
+        are not uploaded, copied off-device, or transmitted.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Apple Music activity</strong>
+        (with your permission) — to show songs you have played. Nostaliga reads
+        from the Apple Music system; nothing is written back without an
+        explicit action.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">HealthKit data</strong>
+        (with your permission) — workouts, walking sessions, and sleep
+        analysis, shown inline with your music history. HealthKit data never
+        leaves your device and is not shared with third parties.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Local storage</strong> —
+        Nostaliga keeps a SwiftData database on-device with your imported
+        history, plus small caches of album art and map snapshots.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Keychain</strong> —
+        OAuth tokens for each third-party service you connect are stored in
+        the iOS Keychain, device-only, not backed up to iCloud.
+      </li>
+    </ul>
+
+    <h2 class="mt-12 text-2xl">Third-party services you can connect</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Nostaliga can read history from the following services if you choose to
+      connect them. Each connection uses that service's official OAuth flow.
+      The token is stored only on your device. Requests are made directly from
+      your device to that service; Nostaliga has no intermediary server.
+    </p>
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-white/10 text-[color:var(--color-ink-dim)]">
+            <th class="py-3 pr-4 font-normal">Service</th>
+            <th class="py-3 pr-4 font-normal">What we read</th>
+            <th class="py-3 pr-4 font-normal">Their privacy policy</th>
+          </tr>
+        </thead>
+        <tbody class="text-[color:var(--color-ink-dim)]">
+          <tr class="border-b border-white/5">
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Spotify</td>
+            <td class="py-3 pr-4">Playback history, saved tracks</td>
+            <td class="py-3 pr-4"
+              ><a href="https://www.spotify.com/legal/privacy-policy/"
+                >spotify.com</a
+              ></td
+            >
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Last.fm</td>
+            <td class="py-3 pr-4">Scrobbles</td>
+            <td class="py-3 pr-4"
+              ><a href="https://www.last.fm/legal/privacy">last.fm</a></td
+            >
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Trakt</td>
+            <td class="py-3 pr-4">Watch history</td>
+            <td class="py-3 pr-4"
+              ><a href="https://trakt.tv/privacy">trakt.tv</a></td
+            >
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Swarm / Foursquare</td>
+            <td class="py-3 pr-4">Check-ins, venue metadata</td>
+            <td class="py-3 pr-4"
+              ><a href="https://foursquare.com/legal/privacy"
+                >foursquare.com</a
+              ></td
+            >
+          </tr>
+          <tr class="border-b border-white/5">
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Strava</td>
+            <td class="py-3 pr-4">Activities, routes</td>
+            <td class="py-3 pr-4"
+              ><a href="https://www.strava.com/legal/privacy"
+                >strava.com</a
+              ></td
+            >
+          </tr>
+          <tr>
+            <td class="py-3 pr-4 text-[color:var(--color-ink)]">Adobe Lightroom</td>
+            <td class="py-3 pr-4">Catalog, asset metadata</td>
+            <td class="py-3 pr-4"
+              ><a href="https://www.adobe.com/privacy/policy.html"
+                >adobe.com</a
+              ></td
+            >
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Nostaliga never shares data it has read from one service with any other
+      service. Data from each integration is used only to build your personal
+      timeline inside the app.
+    </p>
+
+    <h2 class="mt-12 text-2xl">What we do not do</h2>
+    <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
+      <li>No analytics SDK, no crash-reporting SDK, no advertising SDK.</li>
+      <li>No collection of your IP address on a Nostaliga-controlled server.</li>
+      <li>No advertising identifier (IDFA) is read or requested.</li>
+      <li>No "tracking" in the sense defined by Apple's App Tracking
+        Transparency framework.</li>
+      <li>No selling of personal data to any party, ever.</li>
+    </ul>
+
+    <h2 class="mt-12 text-2xl">Your control</h2>
+    <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Disconnect a service</strong>
+        at any time from Settings → Integrations. The OAuth token is removed
+        from Keychain. You may also optionally keep or delete history stored
+        locally for that service.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Delete everything</strong>
+        from Settings → Privacy → Delete All Data. This wipes the on-device
+        database, every OAuth token in Keychain, every cached file, and every
+        preference. The action cannot be undone.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Revoke server-side access</strong>
+        at each connected service's website (e.g., Spotify → Apps, Strava →
+        My Apps). Disconnecting in Nostaliga removes the local token;
+        revoking on the service's site invalidates it globally.
+      </li>
+    </ul>
+
+    <h2 class="mt-12 text-2xl">Children</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Nostaliga is not directed to children under 13 and does not knowingly
+      collect any information from children.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Changes to this policy</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      We will post the updated policy on this page and revise the "Last
+      updated" date above. Material changes will be surfaced inside the app on
+      your next launch.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Contact</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Questions about this policy or about your data: <a
+        href="mailto:dinakar@pageloop.ai">dinakar@pageloop.ai</a
+      >.
+    </p>
+  </article>
+</Layout>
