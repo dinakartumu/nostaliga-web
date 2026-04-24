@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/oauth/strava/callback",
+      "destination": "/api/strava/callback"
+    }
+  ]
+}
