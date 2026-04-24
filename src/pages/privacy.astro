@@ -28,22 +28,62 @@ const lastUpdated = "April 24, 2026";
     <h2 class="mt-12 text-2xl">The short version</h2>
     <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
       <li>
-        Nostaliga has no account system and no backend. We do not operate any
-        server that stores your data.
+        Nostaliga has no user accounts and no database. We do not store your
+        music, photos, workouts, check-ins, or any other personal data on any
+        server.
       </li>
       <li>
         All matching, correlation, and display happens on your device.
       </li>
       <li>
-        The only data that leaves your device is the data you explicitly ask
-        Nostaliga to fetch from a third-party service you have connected. Those
-        requests go directly from your device to that service.
+        The only data that leaves your device is (a) the data you explicitly
+        ask Nostaliga to fetch from a third-party service you have connected,
+        which travels directly from your device to that service, and (b) when
+        connecting Spotify or Strava, a short-lived OAuth code is relayed
+        through a stateless Nostaliga token-swap endpoint (see below) so that
+        the iOS app never has to hold Spotify's or Strava's client secret.
       </li>
       <li>
         We do not use analytics, trackers, advertising identifiers, or
         crash-reporting SDKs.
       </li>
     </ul>
+
+    <h2 class="mt-12 text-2xl">Token-swap endpoint</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Spotify and Strava require apps to hold a <em>client secret</em> to
+      exchange OAuth codes for access tokens. Shipping that secret inside the
+      iOS binary would expose it to anyone. Instead, Nostaliga runs a thin,
+      stateless HTTPS endpoint at <code>nostaliga.app/api/spotify/*</code> and
+      <code>nostaliga.app/api/strava/*</code> that does exactly one thing: it
+      takes a one-time <code>code</code> (or a <code>refresh_token</code>) from
+      your device, attaches the client secret server-side, forwards the request
+      to Spotify or Strava, and returns the response to your device.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">What that endpoint does <em>not</em> do:</p>
+    <ul class="mt-3 space-y-2 text-[color:var(--color-ink-dim)]">
+      <li>It does not have a database.</li>
+      <li>
+        It does not persist your code, access token, or refresh token. Each
+        request is processed in memory and the values are discarded as soon as
+        the response is returned.
+      </li>
+      <li>
+        It does not read your listening history, activities, profile, or any
+        other data — it only performs the token exchange.
+      </li>
+      <li>It does not associate requests with an identity or user record.</li>
+    </ul>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      The endpoint runs on Vercel. Vercel keeps request logs (IP address,
+      request path, status code) as part of standard infrastructure operation;
+      those logs are governed by <a
+        href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a
+      >. The full source of the endpoint is public at <a
+        href="https://github.com/dinakartumu/nostaliga-web"
+        >github.com/dinakartumu/nostaliga-web</a
+      >.
+    </p>
 
     <h2 class="mt-12 text-2xl">What Nostaliga accesses on your device</h2>
     <ul class="mt-4 space-y-3 text-[color:var(--color-ink-dim)]">

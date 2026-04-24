@@ -1,43 +1,79 @@
-# Astro Starter Kit: Minimal
+# nostaliga-web
+
+Marketing site + OAuth token-swap service for the Nostaliga iOS/macOS app,
+deployed to Vercel at https://nostaliga.app.
+
+## Structure
+
+```
+nostaliga-web/
+├── api/                    # Vercel serverless functions (Node 18+)
+│   ├── _shared.js          # encryption, config, upstream HTTP helpers
+│   ├── spotify/
+│   │   ├── token.js        # POST — authorization_code → tokens
+│   │   └── refresh_token.js# POST — refresh_token → access_token
+│   └── strava/
+│       ├── callback.js     # GET  — OAuth trampoline back to deep link
+│       └── token.js        # POST — code OR refresh_token exchange
+├── src/
+│   ├── layouts/Layout.astro
+│   ├── pages/              # /, /privacy, /support
+│   └── styles/global.css
+├── astro.config.mjs
+└── .env.example            # required server-side env vars
+```
+
+Astro builds the static marketing pages; the `api/` directory is picked up
+automatically by Vercel and deployed as Node.js serverless functions at
+`/api/*`. No `vercel.json` is required.
+
+## Local development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev       # Astro dev server on http://localhost:4321
+npx vercel dev    # Astro + API routes together on http://localhost:3000
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+`vercel dev` reads `.env.local` (copy from `.env.example`).
 
-## 🚀 Project Structure
+## Environment variables
 
-Inside of your Astro project, you'll see the following folders and files:
+Set these in the Vercel dashboard (Project → Settings → Environment Variables).
+See `.env.example` for a template.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+| Variable                       | Required          | Purpose                                                                                     |
+| ------------------------------ | ----------------- | ------------------------------------------------------------------------------------------- |
+| `SPOTIFY_CLIENT_ID`            | yes (for Spotify) | Spotify app client ID                                                                       |
+| `SPOTIFY_CLIENT_SECRET`        | yes (for Spotify) | Spotify app client secret                                                                   |
+| `SPOTIFY_CLIENT_CALLBACK_URL`  | yes (for Spotify) | Redirect URI registered in Spotify, must match iOS client                                   |
+| `STRAVA_CLIENT_ID`             | yes (for Strava)  | Strava app client ID                                                                        |
+| `STRAVA_CLIENT_SECRET`         | yes (for Strava)  | Strava app client secret                                                                    |
+| `ENCRYPTION_SECRET`            | optional          | If set, Spotify refresh tokens are aes-256-cbc encrypted before being returned to the iOS client |
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Rotating `ENCRYPTION_SECRET` invalidates every Spotify refresh token already
+stored on users' devices, forcing them to re-authorize.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Endpoints
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Method | Path                         | Description                                             |
+| ------ | ---------------------------- | ------------------------------------------------------- |
+| POST   | `/api/spotify/token`         | Exchange `code` for access + refresh tokens             |
+| POST   | `/api/spotify/refresh_token` | Exchange `refresh_token` for a fresh access token       |
+| GET    | `/api/strava/callback`       | OAuth trampoline — redirects to deep link from `state`  |
+| POST   | `/api/strava/token`          | Exchange `code` or `refresh_token` (via `grant_type`)   |
 
-## 🧞 Commands
+The server is stateless. No tokens or codes are persisted. Each request
+forwards to Spotify/Strava and streams the response back.
 
-All commands are run from the root of the project, from a terminal:
+## Privacy note
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+This service is what allows the iOS app to hold no client secret. The
+server forwards OAuth material to Spotify/Strava on the device's behalf and
+returns the result. It does not persist anything. This is disclosed on
+`/privacy`.
 
-## 👀 Want to learn more?
+## Deploy
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Pushed to `main` → Vercel auto-deploys both the static site and the API
+functions.
