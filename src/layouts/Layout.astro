@@ -41,7 +41,6 @@ const year = new Date().getFullYear();
     <meta name="theme-color" content="#0b0a0f" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,10 +54,17 @@ const year = new Date().getFullYear();
     <header class="mx-auto flex max-w-4xl items-center justify-between px-6 py-6">
       <a
         href="/"
-        class="font-display text-2xl text-[color:var(--color-ink)] hover:no-underline"
+        class="flex items-center gap-3 text-2xl text-[color:var(--color-ink)] hover:no-underline"
         style="font-family: var(--font-display);"
       >
-        Nostaliga
+        <img
+          src="/icons/apple-touch-icon.png"
+          alt=""
+          width="32"
+          height="32"
+          class="h-8 w-8 rounded-lg"
+        />
+        <span>Nostaliga</span>
       </a>
       <nav class="flex items-center gap-6 text-sm text-[color:var(--color-ink-dim)]">
         <a href="/privacy" class="hover:text-[color:var(--color-ink)]">Privacy</a>
