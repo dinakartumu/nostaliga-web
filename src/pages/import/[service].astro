@@ -1,0 +1,136 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  const metaSteps = (service: string, settingsURL: string) => [
+    {
+      text: `Open ${service}'s Account Center → Your information and permissions, then tap Export your information.`,
+      img: "/import/meta-1.png",
+    },
+    { text: "Tap Create export.", img: "/import/meta-2.png" },
+    { text: "Choose Export to device.", img: "/import/meta-3.png" },
+    {
+      text: "Set Date range to All time and Format to JSON, then tap Start export.",
+      img: "/import/meta-4.png",
+    },
+    {
+      text: "When the export is ready, download and unzip it, then in Nostaliga tap Import Archive and choose the folder.",
+      img: null,
+    },
+  ];
+
+  const services: Record<string, any> = {
+    spotify: {
+      name: "Spotify",
+      intro:
+        "Import your complete listening history from Spotify's Extended Streaming History export.",
+      steps: [
+        { text: "Open Spotify's Privacy settings and sign in.", img: null },
+        {
+          text: "Under “Download your data”, tick Extended streaming history and tap Request data.",
+          img: "/import/spotify-1.png",
+        },
+        {
+          text: "Spotify emails you the export when it's ready — this can take up to 30 days.",
+          img: null,
+        },
+        {
+          text: "Download and unzip the export, then in Nostaliga tap Import Extended History and choose the unzipped folder.",
+          img: null,
+        },
+      ],
+      settingsURL: "https://www.spotify.com/account/privacy",
+      settingsLabel: "Open Spotify Privacy Settings",
+    },
+    instagram: {
+      name: "Instagram",
+      intro: null,
+      steps: metaSteps("Instagram", "https://accountscenter.instagram.com/info_and_permissions/"),
+      settingsURL: "https://accountscenter.instagram.com/info_and_permissions/",
+      settingsLabel: "Open Instagram Export Settings",
+    },
+    facebook: {
+      name: "Facebook",
+      intro: null,
+      steps: metaSteps("Facebook", "https://accountscenter.facebook.com/?entry_point=app_settings"),
+      settingsURL: "https://accountscenter.facebook.com/?entry_point=app_settings",
+      settingsLabel: "Open Facebook Export Settings",
+    },
+    twitter: {
+      name: "X",
+      intro: null,
+      steps: [
+        {
+          text: "Open X → Settings → “Download an archive of your data” and tap Request archive.",
+          img: "/import/twitter-1.png",
+        },
+        {
+          text: "X prepares your archive and notifies you when it's ready — this can take 24 hours or more.",
+          img: null,
+        },
+        {
+          text: "Download and unzip the archive, then in Nostaliga tap Import Archive and choose the folder.",
+          img: null,
+        },
+      ],
+      settingsURL: "https://x.com/settings/download_your_data",
+      settingsLabel: "Open X Data Settings",
+    },
+  };
+
+  return Object.entries(services).map(([service, data]) => ({
+    params: { service },
+    props: data,
+  }));
+}
+
+const { name, intro, steps, settingsURL, settingsLabel } = Astro.props;
+const { service } = Astro.params;
+---
+
+<Layout
+  title={`How to get your ${name} data — Nostaliga`}
+  description={`Step-by-step instructions for exporting your ${name} data and importing it into Nostaliga.`}
+  path={`/import/${service}`}
+>
+  <article class="pt-16">
+    <h1 class="text-4xl sm:text-5xl" style="font-family: var(--font-display);">
+      How to get your {name} data
+    </h1>
+    {intro && <p class="mt-6 max-w-2xl text-[color:var(--color-ink-dim)]">{intro}</p>}
+
+    <ol class="mt-10 space-y-10">
+      {
+        steps.map((step: any, i: number) => (
+          <li class="flex flex-col gap-4">
+            <div class="flex items-start gap-4">
+              <span
+                class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--color-accent,#4f46e5)] text-sm font-semibold text-white"
+              >
+                {i + 1}
+              </span>
+              <p class="text-[color:var(--color-ink)]">{step.text}</p>
+            </div>
+            {step.img && (
+              <img
+                src={step.img}
+                alt={`Step ${i + 1}`}
+                loading="lazy"
+                class="ml-11 max-w-xs rounded-xl border border-white/10"
+              />
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    <a
+      href={settingsURL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-12 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[color:var(--color-bg-soft)] px-5 py-3 text-[color:var(--color-ink)] hover:no-underline"
+    >
+      {settingsLabel} ↗
+    </a>
+  </article>
+</Layout>
