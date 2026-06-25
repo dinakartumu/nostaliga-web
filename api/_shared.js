@@ -150,6 +150,11 @@ export function decryptRefreshToken(token) {
 
 // --- Upstream HTTP helpers ---------------------------------------------
 
+// Trakt is behind Cloudflare and 403s requests with no User-Agent (Node's
+// fetch sends none, unlike on-device URLSession), returning an HTML block page
+// that breaks JSON parsing. Send an identifying UA on every upstream call.
+const USER_AGENT = "Nostaliga/1.0 (+https://www.nostaliga.app)";
+
 export async function spotifyRequest(grantType, params) {
   const credentials = Buffer.from(
     `${config.spotify.clientId}:${config.spotify.clientSecret}`,
@@ -165,6 +170,7 @@ export async function spotifyRequest(grantType, params) {
     headers: {
       Authorization: `Basic ${credentials}`,
       "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": USER_AGENT,
     },
     body: body.toString(),
   });
@@ -183,7 +189,10 @@ export async function stravaRequest(grantType, params) {
 
   const response = await fetch("https://www.strava.com/oauth/token", {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": USER_AGENT,
+    },
     body: body.toString(),
   });
 
@@ -204,7 +213,10 @@ export async function traktRequest(grantType, params) {
 
   const response = await fetch("https://api.trakt.tv/oauth/token", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "User-Agent": USER_AGENT,
+    },
     body: JSON.stringify(body),
   });
 
@@ -227,7 +239,10 @@ export async function foursquareRequest(code) {
     "https://foursquare.com/oauth2/access_token",
     {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": USER_AGENT,
+      },
       body: body.toString(),
     },
   );
