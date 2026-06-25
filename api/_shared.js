@@ -16,6 +16,16 @@ export const config = {
     clientId: process.env.STRAVA_CLIENT_ID,
     clientSecret: process.env.STRAVA_CLIENT_SECRET,
   },
+  trakt: {
+    clientId: process.env.TRAKT_CLIENT_ID,
+    clientSecret: process.env.TRAKT_CLIENT_SECRET,
+    redirectUri: process.env.TRAKT_REDIRECT_URI,
+  },
+  foursquare: {
+    clientId: process.env.FOURSQUARE_CLIENT_ID,
+    clientSecret: process.env.FOURSQUARE_CLIENT_SECRET,
+    redirectUri: process.env.FOURSQUARE_REDIRECT_URI,
+  },
   encryptionSecret: process.env.ENCRYPTION_SECRET,
 };
 
@@ -37,12 +47,36 @@ export function requireStravaConfig(res) {
   return true;
 }
 
+export function requireTraktConfig(res) {
+  const { clientId, clientSecret, redirectUri } = config.trakt;
+  if (!clientId || !clientSecret || !redirectUri) {
+    res.status(500).json({ error: "Trakt is not configured on the server." });
+    return false;
+  }
+  return true;
+}
+
+export function requireFoursquareConfig(res) {
+  const { clientId, clientSecret, redirectUri } = config.foursquare;
+  if (!clientId || !clientSecret || !redirectUri) {
+    res
+      .status(500)
+      .json({ error: "Foursquare is not configured on the server." });
+    return false;
+  }
+  return true;
+}
+
 // --- CORS ---------------------------------------------------------------
 
-export function applyCors(res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// These token endpoints are called by the native iOS app via URLSession, which
+// is not subject to CORS. We deliberately do NOT emit a wildcard
+// Access-Control-Allow-Origin: there is no legitimate cross-origin browser
+// caller for these credential-issuing routes, so a browser preflight should
+// fail rather than be waved through (NOS-82 hardening). Kept as a uniform hook
+// so a future route that genuinely needs CORS can opt in here in one place.
+export function applyCors(_res) {
+  // Intentionally no CORS headers for native-only credential endpoints.
 }
 
 // --- Body parsing -------------------------------------------------------
@@ -95,6 +129,25 @@ export function decrypt(text) {
   return decrypted;
 }
 
+// Encrypt the refresh_token field on an upstream token response in place, when
+// ENCRYPTION_SECRET is configured. No-op otherwise. Used so every provider
+// stores an opaque refresh_token on the device, matching the Spotify flow.
+export function encryptRefreshTokenInPlace(data) {
+  if (data && data.refresh_token && config.encryptionSecret) {
+    data.refresh_token = encrypt(data.refresh_token);
+  }
+  return data;
+}
+
+// Reverse for an incoming refresh_token. Normalizes escaped newlines some HTTP
+// clients inject, and tolerates plaintext tokens issued before encryption was
+// enabled (decrypt() returns its input unchanged when it isn't iv:ciphertext).
+export function decryptRefreshToken(token) {
+  const normalized = String(token).replace(/\\n/g, "\n");
+  if (!config.encryptionSecret) return normalized;
+  return decrypt(normalized);
+}
+
 // --- Upstream HTTP helpers ---------------------------------------------
 
 export async function spotifyRequest(grantType, params) {
@@ -133,6 +186,51 @@ export async function stravaRequest(grantType, params) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: body.toString(),
   });
+
+  const data = await response.json();
+  return { status: response.status, data };
+}
+
+// Trakt expects a JSON body and echoes the client_id back; redirect_uri must
+// match the value registered in the Trakt app and configured on the iOS client.
+export async function traktRequest(grantType, params) {
+  const body = {
+    client_id: config.trakt.clientId,
+    client_secret: config.trakt.clientSecret,
+    redirect_uri: config.trakt.redirectUri,
+    grant_type: grantType,
+    ...params,
+  };
+
+  const response = await fetch("https://api.trakt.tv/oauth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await response.json();
+  return { status: response.status, data };
+}
+
+// Foursquare v2 has no PKCE and no refresh — access tokens don't expire, so
+// only the authorization_code exchange needs proxying. Returns { access_token }.
+export async function foursquareRequest(code) {
+  const body = new URLSearchParams({
+    client_id: config.foursquare.clientId,
+    client_secret: config.foursquare.clientSecret,
+    grant_type: "authorization_code",
+    redirect_uri: config.foursquare.redirectUri,
+    code,
+  });
+
+  const response = await fetch(
+    "https://foursquare.com/oauth2/access_token",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    },
+  );
 
   const data = await response.json();
   return { status: response.status, data };
