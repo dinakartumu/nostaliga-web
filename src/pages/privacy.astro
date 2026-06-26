@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const lastUpdated = "April 24, 2026";
+const lastUpdated = "June 26, 2026";
 ---
 
 <Layout
@@ -39,9 +39,10 @@ const lastUpdated = "April 24, 2026";
         The only data that leaves your device is (a) the data you explicitly
         ask Nostaliga to fetch from a third-party service you have connected,
         which travels directly from your device to that service, and (b) when
-        connecting Spotify or Strava, a short-lived OAuth code is relayed
-        through a stateless Nostaliga token-swap endpoint (see below) so that
-        the iOS app never has to hold Spotify's or Strava's client secret.
+        connecting Spotify, Strava, Trakt, or Swarm, a short-lived OAuth code —
+        and later token refreshes — are relayed through a stateless Nostaliga
+        token-swap endpoint (see below) so the app never has to hold those
+        services' client secrets.
       </li>
       <li>
         We do not use analytics, trackers, advertising identifiers, or
@@ -51,14 +52,19 @@ const lastUpdated = "April 24, 2026";
 
     <h2 class="mt-12 text-2xl">Token-swap endpoint</h2>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      Spotify and Strava require apps to hold a <em>client secret</em> to
-      exchange OAuth codes for access tokens. Shipping that secret inside the
-      iOS binary would expose it to anyone. Instead, Nostaliga runs a thin,
-      stateless HTTPS endpoint at <code>nostaliga.app/api/spotify/*</code> and
-      <code>nostaliga.app/api/strava/*</code> that does exactly one thing: it
-      takes a one-time <code>code</code> (or a <code>refresh_token</code>) from
-      your device, attaches the client secret server-side, forwards the request
-      to Spotify or Strava, and returns the response to your device.
+      Spotify, Strava, Trakt, and Swarm (Foursquare) require apps to hold a <em
+        >client secret</em
+      > to exchange OAuth codes for access tokens. Shipping that secret inside
+      the app binary would expose it to anyone. Instead, Nostaliga runs a thin,
+      stateless HTTPS endpoint at <code>nostaliga.app/api/spotify/*</code>,
+      <code>nostaliga.app/api/strava/*</code>,
+      <code>nostaliga.app/api/trakt/*</code>, and
+      <code>nostaliga.app/api/foursquare/*</code> that does exactly one thing:
+      it takes a one-time <code>code</code> (or a <code>refresh_token</code>)
+      from your device, attaches the client secret server-side, forwards the
+      request to that service, and returns the response to your device. Refresh
+      tokens are encrypted before they are returned, so the copy kept on your
+      device is opaque.
     </p>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">What that endpoint does <em>not</em> do:</p>
     <ul class="mt-3 space-y-2 text-[color:var(--color-ink-dim)]">
@@ -120,9 +126,12 @@ const lastUpdated = "April 24, 2026";
     <h2 class="mt-12 text-2xl">Third-party services you can connect</h2>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
       Nostaliga can read history from the following services if you choose to
-      connect them. Each connection uses that service's official OAuth flow.
-      The token is stored only on your device. Requests are made directly from
-      your device to that service; Nostaliga has no intermediary server.
+      connect them. Each connection uses that service's official OAuth flow, and
+      the token is stored only on your device. History requests are made
+      directly from your device to each service. For Spotify, Strava, Trakt, and
+      Swarm, the initial OAuth token exchange (and later refreshes) passes
+      through Nostaliga's stateless token-swap endpoint described above; no other
+      requests go through an intermediary server.
     </p>
     <div class="mt-6 overflow-x-auto">
       <table class="w-full text-left text-sm">
