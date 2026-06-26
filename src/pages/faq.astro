@@ -83,15 +83,22 @@ import Layout from "../layouts/Layout.astro";
 
       <div>
         <h3 class="text-lg text-[color:var(--color-ink)]">
-          How do I import Twitter / X, Instagram, or Facebook?
+          How do I import my Twitter / X, Instagram, Facebook, or Spotify
+          history from a data export?
         </h3>
         <p class="mt-2">
-          Those aren't OAuth connections — you download your own data archive
-          from each service and add it to Nostaliga. The archive is unpacked and
-          processed entirely on your device; Nostaliga never connects to those
-          services. Step-by-step instructions for requesting each archive are
-          linked from Settings → Integrations.
+          Some history comes from a data export you request from the service,
+          download, and then add to Nostaliga — it's unpacked and processed
+          entirely on your device. Step-by-step guides:
         </p>
+        <ul class="mt-3 list-disc space-y-1 pl-5">
+          <li><a href="/import/twitter">Get your Twitter / X archive</a></li>
+          <li><a href="/import/instagram">Get your Instagram archive</a></li>
+          <li><a href="/import/facebook">Get your Facebook archive</a></li>
+          <li>
+            <a href="/import/spotify">Get your Spotify listening history</a>
+          </li>
+        </ul>
       </div>
 
       <div>
