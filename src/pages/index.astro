@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout
-  title="Nostaliga — a timeline of everything you've done"
+  title="Nostaliga — the photos behind the songs you loved"
   path="/"
 >
   <section class="pt-16 pb-24">
@@ -14,12 +14,12 @@ import Layout from "../layouts/Layout.astro";
       class="text-5xl leading-tight sm:text-6xl md:text-7xl"
       style="font-family: var(--font-display);"
     >
-      Every song, every step, every place — on one timeline.
+      A song you loved still knows where you were.
     </h1>
     <p class="mt-8 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
-      Nostaliga stitches together your listening history, workouts, photos, and
-      check-ins into a single scrollable memory. Everything stays on your
-      device.
+      Play a track you were once obsessed with and Nostaliga resurfaces the
+      photos you took back then — matched to your own listening history,
+      privately, right on your device.
     </p>
     <div class="mt-10 flex flex-wrap gap-4">
       <a
@@ -34,6 +34,90 @@ import Layout from "../layouts/Layout.astro";
       >
         How your data is handled
       </a>
+    </div>
+  </section>
+
+  <section class="border-t border-white/5 py-20">
+    <p class="mb-6 text-sm uppercase tracking-[0.2em] text-[color:var(--color-ink-dim)]">
+      Why I built it
+    </p>
+    <div class="max-w-2xl space-y-6 text-lg text-[color:var(--color-ink-dim)]">
+      <p>
+        I have a song — <em class="not-italic text-[color:var(--color-accent)]"
+          >Aalaporaan Thamizhan</em
+        > — that I played on every long ride around the Bay Area. I can't hear it
+        now without those rides coming straight back: the road, the light, who I
+        was then.
+      </p>
+      <p>
+        Coldplay's <em class="not-italic text-[color:var(--color-accent)]"
+          >Magic</em
+        > does the same thing. It drops me into a trip to Boston, and the days I
+        spent there with my uncle and cousin.
+      </p>
+      <p>
+        Those memories never left — the song was the key, I just had no way to
+        open the door. So I built Nostaliga. It notices what you're playing,
+        looks back at when you used to play it on repeat, and brings the photos
+        from that time back to the surface.
+      </p>
+    </div>
+    <p
+      class="mt-8 text-[color:var(--color-ink)]"
+      style="font-family: var(--font-display);"
+    >
+      — Dinakar, founder
+    </p>
+
+    <div class="mt-14 grid gap-10 sm:grid-cols-2">
+      <figure>
+        <div class="grid grid-cols-2 gap-3">
+          <img
+            src="/story/bayarea-1.jpg"
+            alt="Nostaliga showing Aalaporaan Thamizhan with 33 plays above a 2017 timeline"
+            width="461"
+            height="1000"
+            loading="lazy"
+            class="w-full rounded-2xl border border-white/10"
+          />
+          <img
+            src="/story/bayarea-2.jpg"
+            alt="The photos resurfaced from the time Aalaporaan Thamizhan was on repeat"
+            width="461"
+            height="1000"
+            loading="lazy"
+            class="w-full rounded-2xl border border-white/10"
+          />
+        </div>
+        <figcaption class="mt-4 text-sm text-[color:var(--color-ink-dim)]">
+          <span class="text-[color:var(--color-accent)]">Aalaporaan Thamizhan</span>
+          — Bay Area rides, 2017
+        </figcaption>
+      </figure>
+      <figure>
+        <div class="grid grid-cols-2 gap-3">
+          <img
+            src="/story/boston-1.jpg"
+            alt="Nostaliga showing Magic by Coldplay with 101 plays above a 2014 timeline"
+            width="461"
+            height="1000"
+            loading="lazy"
+            class="w-full rounded-2xl border border-white/10"
+          />
+          <img
+            src="/story/boston-2.jpg"
+            alt="The photos resurfaced from the time Magic by Coldplay was on repeat"
+            width="461"
+            height="1000"
+            loading="lazy"
+            class="w-full rounded-2xl border border-white/10"
+          />
+        </div>
+        <figcaption class="mt-4 text-sm text-[color:var(--color-ink-dim)]">
+          <span class="text-[color:var(--color-accent)]">Magic</span>
+          — Coldplay, 2014
+        </figcaption>
+      </figure>
     </div>
   </section>
 
