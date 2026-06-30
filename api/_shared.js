@@ -26,6 +26,16 @@ export const config = {
     clientSecret: process.env.FOURSQUARE_CLIENT_SECRET,
     redirectUri: process.env.FOURSQUARE_REDIRECT_URI,
   },
+  tmdb: {
+    // TMDB v4 read access token. Held server-side so it never ships in the app
+    // bundle (NOS-94), and so clients on networks that block api.themoviedb.org
+    // can still resolve posters (we make the metadata call here).
+    apiKey: process.env.TMDB_API_KEY,
+  },
+  // Optional shared secret. When set, the artwork proxy requires a matching
+  // `x-nostaliga-app` header so the TMDB key/quota isn't open to anonymous
+  // abuse. No-op when unset (App Attest is the stronger follow-up).
+  appProxySecret: process.env.APP_PROXY_SECRET,
   encryptionSecret: process.env.ENCRYPTION_SECRET,
 };
 
@@ -62,6 +72,26 @@ export function requireFoursquareConfig(res) {
     res
       .status(500)
       .json({ error: "Foursquare is not configured on the server." });
+    return false;
+  }
+  return true;
+}
+
+export function requireTmdbConfig(res) {
+  if (!config.tmdb.apiKey) {
+    res.status(500).json({ error: "TMDB is not configured on the server." });
+    return false;
+  }
+  return true;
+}
+
+// Optional app gate for the artwork proxy. If APP_PROXY_SECRET is set, require a
+// matching `x-nostaliga-app` header; otherwise allow (so the proxy works out of
+// the box and prod can opt in without a code change).
+export function requireAppProxyAuth(req, res) {
+  if (!config.appProxySecret) return true;
+  if (req.headers["x-nostaliga-app"] !== config.appProxySecret) {
+    res.status(401).json({ error: "unauthorized" });
     return false;
   }
   return true;
@@ -249,4 +279,68 @@ export async function foursquareRequest(code) {
 
   const data = await response.json();
   return { status: response.status, data };
+}
+
+// --- TMDB artwork resolution (NOS-94) ----------------------------------
+
+// Resolve-only proxy: we make the TMDB metadata call here (token server-side)
+// and return absolute image.tmdb.org URLs. The client loads the bytes directly
+// from the CDN and caches the URL, so each title is resolved ~once.
+const TMDB_API = "https://api.themoviedb.org/3";
+const TMDB_IMAGE = "https://image.tmdb.org/t/p";
+
+async function tmdbGet(path) {
+  return fetch(`${TMDB_API}${path}`, {
+    headers: {
+      Authorization: `Bearer ${config.tmdb.apiKey}`,
+      Accept: "application/json",
+      "User-Agent": USER_AGENT,
+    },
+  });
+}
+
+// Poster (w500) + backdrop (w1280) for a movie or show. `type` is the iOS
+// media type: "movie" | "tv" | "episode" (episodes map to the show's tv entry).
+// Missing paths and 404s resolve to the "none" sentinel the client expects.
+export async function tmdbBaseArtwork(type, id) {
+  const path = type === "episode" ? "tv" : type; // movie | tv
+  const response = await tmdbGet(`/${path}/${id}`);
+  if (response.status === 404) {
+    return { status: 200, data: { posterURL: "none", backdropURL: "none" } };
+  }
+  if (!response.ok) {
+    return { status: response.status, data: { error: `tmdb ${response.status}` } };
+  }
+  const detail = await response.json();
+  return {
+    status: 200,
+    data: {
+      posterURL: detail.poster_path
+        ? `${TMDB_IMAGE}/w500${detail.poster_path}`
+        : "none",
+      backdropURL: detail.backdrop_path
+        ? `${TMDB_IMAGE}/w1280${detail.backdrop_path}`
+        : "none",
+    },
+  };
+}
+
+// Episode still (w500) for a show's season/episode. `id` is the show's TMDB id.
+export async function tmdbEpisodeStill(id, season, episode) {
+  const response = await tmdbGet(`/tv/${id}/season/${season}/episode/${episode}`);
+  if (response.status === 404) {
+    return { status: 200, data: { stillURL: "none" } };
+  }
+  if (!response.ok) {
+    return { status: response.status, data: { error: `tmdb ${response.status}` } };
+  }
+  const detail = await response.json();
+  return {
+    status: 200,
+    data: {
+      stillURL: detail.still_path
+        ? `${TMDB_IMAGE}/w500${detail.still_path}`
+        : "none",
+    },
+  };
 }
