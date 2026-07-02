@@ -49,6 +49,8 @@ See `.env.example` for a template.
 | `SPOTIFY_CLIENT_CALLBACK_URL`  | yes (for Spotify) | Redirect URI registered in Spotify, must match iOS client                                   |
 | `STRAVA_CLIENT_ID`             | yes (for Strava)  | Strava app client ID                                                                        |
 | `STRAVA_CLIENT_SECRET`         | yes (for Strava)  | Strava app client secret                                                                    |
+| `LASTFM_API_KEY`               | yes (for Last.fm) | Last.fm API key (public; also in the app) — used to sign `auth.getSession`                  |
+| `LASTFM_SHARED_SECRET`         | yes (for Last.fm) | Last.fm shared secret — held server-side so it never ships in the app (NOS-99)              |
 | `ENCRYPTION_SECRET`            | optional          | If set, Spotify refresh tokens are aes-256-cbc encrypted before being returned to the iOS client |
 
 Rotating `ENCRYPTION_SECRET` invalidates every Spotify refresh token already
@@ -62,6 +64,7 @@ stored on users' devices, forcing them to re-authorize.
 | POST   | `/api/spotify/refresh_token` | Exchange `refresh_token` for a fresh access token       |
 | GET    | `/api/strava/callback`       | OAuth trampoline — redirects to deep link from `state`  |
 | POST   | `/api/strava/token`          | Exchange `code` or `refresh_token` (via `grant_type`)   |
+| POST   | `/api/lastfm/session`        | Exchange a Last.fm auth `token` for a session key (signs `auth.getSession` server-side) |
 
 The server is stateless. No tokens or codes are persisted. Each request
 forwards to Spotify/Strava and streams the response back.
