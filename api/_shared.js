@@ -26,6 +26,13 @@ export const config = {
     clientSecret: process.env.FOURSQUARE_CLIENT_SECRET,
     redirectUri: process.env.FOURSQUARE_REDIRECT_URI,
   },
+  lastfm: {
+    // api_key is public (ships in the app / appears in URLs); only the shared
+    // secret must stay server-side. Both are needed here to compute the
+    // auth.getSession api_sig off-device (NOS-99).
+    apiKey: process.env.LASTFM_API_KEY,
+    sharedSecret: process.env.LASTFM_SHARED_SECRET,
+  },
   tmdb: {
     // TMDB v4 read access token. Held server-side so it never ships in the app
     // bundle (NOS-94), and so clients on networks that block api.themoviedb.org
