@@ -1,5 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// App screenshots shown in the gallery. Files live in public/screenshots/
+// and are generated from the fixture-mode marketing captures (NOS-95).
+const screens = [
+  { src: "/screenshots/now-playing.jpg", label: "Now playing", alt: "Nostaliga now-playing screen with a full-bleed album cover above a timeline of past listens" },
+  { src: "/screenshots/activity.jpg", label: "Every ride", alt: "A cycling activity with its full route drawn on the map, distance, elevation and the songs played" },
+  { src: "/screenshots/places.jpg", label: "Your places", alt: "A frequently-visited place showing total visits and a visit-history chart" },
+  { src: "/screenshots/photos.jpg", label: "Throwback photos", alt: "A photo memory from a past day" },
+  { src: "/screenshots/social.jpg", label: "Old posts", alt: "Old tweets and Facebook posts gathered on one timeline" },
+  { src: "/screenshots/on-this-day.jpg", label: "On this day", alt: "The On This Day cover-flow of memories from years past" },
+];
 ---
 
 <Layout
@@ -34,6 +45,36 @@ import Layout from "../layouts/Layout.astro";
       >
         How your data is handled
       </a>
+    </div>
+  </section>
+
+  <section class="border-t border-white/5 py-20">
+    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
+      A scrollable memory of everything you've done.
+    </h2>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
+      Your music, rides, places, photos, and old posts — the way you actually
+      lived them.
+    </p>
+    <div
+      class="mt-12 -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      {
+        screens.map((s) => (
+          <figure class="shrink-0 snap-center">
+            <img
+              src={s.src}
+              alt={s.alt}
+              width="260"
+              loading="lazy"
+              class="w-[210px] rounded-[2rem] border border-white/10 shadow-2xl sm:w-[250px]"
+            />
+            <figcaption class="mt-3 text-center text-sm text-[color:var(--color-ink-dim)]">
+              {s.label}
+            </figcaption>
+          </figure>
+        ))
+      }
     </div>
   </section>
 
