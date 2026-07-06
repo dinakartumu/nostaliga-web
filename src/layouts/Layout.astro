@@ -5,12 +5,14 @@ interface Props {
   title: string;
   description?: string;
   path?: string;
+  wide?: boolean;
 }
 
 const {
   title,
   description = "Nostaliga reconstructs your personal history — music, workouts, photos, and check-ins — on a single timeline. Everything stays on your device.",
   path = "/",
+  wide = false,
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site ?? "https://nostaliga.app");
@@ -73,7 +75,7 @@ const year = new Date().getFullYear();
       </nav>
     </header>
 
-    <main class="mx-auto max-w-4xl px-6 pb-24">
+    <main class={wide ? "w-full pb-24" : "mx-auto max-w-4xl px-6 pb-24"}>
       <slot />
     </main>
 

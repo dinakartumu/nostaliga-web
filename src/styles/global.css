@@ -7,9 +7,12 @@
   --color-ink-dim: #a8a29a;
   --color-accent: #e0b858;
   --font-display:
-    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas,
-    monospace;
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    "Inter", system-ui, sans-serif;
   --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    "Inter", system-ui, sans-serif;
+  --font-mono:
     "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas,
     monospace;
 }
@@ -40,6 +43,7 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.022em;
+    font-weight: 600;
   }
 }
