@@ -1,140 +1,287 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-// App screenshots shown in the gallery. Files live in public/screenshots/
-// and are generated from the fixture-mode marketing captures (NOS-95).
-const screens = [
-  { src: "/screenshots/now-playing.jpg", label: "Now playing", alt: "Nostaliga now-playing screen with a full-bleed album cover above a timeline of past listens" },
-  { src: "/screenshots/activity.jpg", label: "Every ride", alt: "A cycling activity with its full route drawn on the map, distance, elevation and the songs played" },
-  { src: "/screenshots/places.jpg", label: "Your places", alt: "A frequently-visited place showing total visits and a visit-history chart" },
-  { src: "/screenshots/photos.jpg", label: "Throwback photos", alt: "A photo memory from a past day" },
-  { src: "/screenshots/social.jpg", label: "Old posts", alt: "Old tweets and Facebook posts gathered on one timeline" },
-  { src: "/screenshots/on-this-day.jpg", label: "On this day", alt: "The On This Day cover-flow of memories from years past" },
+// Feature screenshots live in public/screenshots/ (generated from fixture mode).
+const memories = [
+  {
+    img: "/screenshots/now-playing.jpg",
+    eyebrow: "Music",
+    title: "Your soundtrack, remembered.",
+    body: "Every track you played — when, where, and how many times. The score to your life, back on the timeline.",
+  },
+  {
+    img: "/screenshots/photos.jpg",
+    eyebrow: "Photos",
+    title: "The photos you forgot you took.",
+    body: "Your camera roll, matched on-device to the moment and the music that was playing.",
+  },
+  {
+    img: "/screenshots/activity.jpg",
+    eyebrow: "Activities",
+    title: "Every mile has a soundtrack.",
+    body: "Rides, runs and hikes drawn on the map — with the songs that carried you through them.",
+  },
+  {
+    img: "/screenshots/places.jpg",
+    eyebrow: "Places",
+    title: "The places you kept going back to.",
+    body: "Check-ins remember the coffee shops, libraries and streets that quietly became yours.",
+  },
+  {
+    img: "/screenshots/social.jpg",
+    eyebrow: "Posts",
+    title: "Your cringe, preserved.",
+    body: "The tweets and posts you'd rather forget — right where you left them, exactly as awkward.",
+  },
+];
+
+const life = [
+  {
+    img: "/screenshots/calendar.jpg",
+    eyebrow: "Calendar",
+    title: "The plans you actually kept.",
+    body: "Dinners, reservations and events — who was invited, and who actually showed up.",
+  },
+  {
+    img: "/screenshots/tv.jpg",
+    eyebrow: "Movies & TV",
+    title: "Every finale. Every letdown.",
+    body: "What you watched, the night you finished it, and the tweet you fired off about the ending.",
+  },
 ];
 ---
 
-<Layout
-  title="Nostaliga — a timeline of everything you've done"
-  path="/"
->
-  <section class="pt-16 pb-24">
-    <p class="mb-6 text-sm uppercase tracking-[0.2em] text-[color:var(--color-ink-dim)]">
-      Coming soon to iPhone
-    </p>
-    <h1
-      class="text-5xl leading-tight sm:text-6xl md:text-7xl"
-      style="font-family: var(--font-display);"
-    >
-      Every song, every step, every place — on one timeline.
-    </h1>
-    <p class="mt-8 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
-      Nostaliga stitches together your listening history, workouts, photos, and
-      check-ins into a single scrollable memory. Everything stays on your
-      device.
-    </p>
-    <div class="mt-10 flex flex-wrap gap-4">
-      <a
-        href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20TestFlight"
-        class="rounded-full bg-[color:var(--color-accent)] px-6 py-3 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
-      >
-        Request TestFlight access
-      </a>
-      <a
-        href="/privacy"
-        class="rounded-full border border-white/15 px-6 py-3 text-sm text-[color:var(--color-ink)] hover:no-underline hover:border-white/30"
-      >
-        How your data is handled
-      </a>
-    </div>
-  </section>
-
-  <section class="border-t border-white/5 py-20">
-    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
-      A scrollable memory of everything you've done.
-    </h2>
-    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
-      Your music, rides, places, photos, and old posts — the way you actually
-      lived them.
-    </p>
+<Layout title="Nostaliga — a timeline of everything you've done" path="/" wide>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
     <div
-      class="mt-12 -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      class="pointer-events-none absolute inset-x-0 -top-40 mx-auto h-[36rem] max-w-3xl rounded-full opacity-40 blur-3xl"
+      style="background: radial-gradient(closest-side, rgba(224,184,88,0.35), transparent 70%);"
+      aria-hidden="true"
     >
-      {
-        screens.map((s) => (
-          <figure class="shrink-0 snap-center">
-            <img
-              src={s.src}
-              alt={s.alt}
-              width="260"
-              loading="lazy"
-              class="w-[210px] rounded-[2rem] border border-white/10 shadow-2xl sm:w-[250px]"
-            />
-            <figcaption class="mt-3 text-center text-sm text-[color:var(--color-ink-dim)]">
-              {s.label}
-            </figcaption>
-          </figure>
-        ))
-      }
+    </div>
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-8 text-center sm:pt-24">
+      <p
+        class="mb-6 text-xs uppercase tracking-[0.28em] text-[color:var(--color-ink-dim)]"
+      >
+        Coming soon to iPhone
+      </p>
+      <h1
+        class="mx-auto max-w-4xl text-5xl leading-[1.05] sm:text-7xl md:text-[5.5rem]"
+        style="font-family: var(--font-display);"
+      >
+        Everything you've done, on one timeline.
+      </h1>
+      <p
+        class="mx-auto mt-8 max-w-2xl text-lg text-[color:var(--color-ink-dim)] sm:text-xl"
+      >
+        Nostaliga quietly stitches your music, photos, workouts, places, posts
+        and screens into a single scrollable memory — and keeps every bit of it
+        on your device.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a
+          href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20TestFlight"
+          class="rounded-full bg-[color:var(--color-accent)] px-7 py-3 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
+        >
+          Request TestFlight access
+        </a>
+        <a
+          href="/privacy"
+          class="rounded-full border border-white/15 px-7 py-3 text-sm text-[color:var(--color-ink)] hover:no-underline hover:border-white/40"
+        >
+          How your data is handled
+        </a>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-6 flex max-w-6xl justify-center px-6 pb-8">
+      <img
+        src="/screenshots/photos.jpg"
+        alt="The Nostaliga now-playing timeline showing a memory from years past"
+        width="300"
+        loading="eager"
+        class="w-[260px] rounded-[2.4rem] border border-white/10 shadow-[0_40px_120px_-20px_rgba(0,0,0,0.8)] sm:w-[300px]"
+      />
     </div>
   </section>
 
-  <section class="border-t border-white/5 py-20">
-    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
-      Brings your memory together from everywhere you already are.
-    </h2>
-    <div class="mt-12 grid gap-8 sm:grid-cols-2">
-      <div>
-        <h3 class="text-xl">Music</h3>
-        <p class="mt-2 text-[color:var(--color-ink-dim)]">
-          Apple Music, Spotify, and Last.fm — every track you've listened to,
-          when, and where.
-        </p>
-      </div>
-      <div>
-        <h3 class="text-xl">Health</h3>
-        <p class="mt-2 text-[color:var(--color-ink-dim)]">
-          Workouts from HealthKit alongside the soundtrack you had on.
-        </p>
-      </div>
-      <div>
-        <h3 class="text-xl">Places</h3>
-        <p class="mt-2 text-[color:var(--color-ink-dim)]">
-          Swarm check-ins and Strava routes remember the venues and paths each
-          moment took.
-        </p>
-      </div>
-      <div>
-        <h3 class="text-xl">Photos & words</h3>
-        <p class="mt-2 text-[color:var(--color-ink-dim)]">
-          On-device photo matching and your Twitter archive round out what you
-          actually saw and said.
-        </p>
+  <!-- Statement -->
+  <section class="border-t border-white/5 py-24">
+    <div class="mx-auto max-w-4xl px-6 text-center">
+      <h2
+        class="text-3xl leading-tight sm:text-5xl"
+        style="font-family: var(--font-display);"
+      >
+        You already made the memories.
+        <span class="text-[color:var(--color-ink-dim)]"
+          >Nostaliga just brings them back.</span
+        >
+      </h2>
+    </div>
+  </section>
+
+  <!-- Band 1: Everything you did -->
+  <section class="pt-12">
+    <div class="mx-auto max-w-6xl px-6">
+      <p
+        class="text-xs uppercase tracking-[0.28em] text-[color:var(--color-accent)]"
+      >
+        Everything you did
+      </p>
+    </div>
+    {
+      memories.map((f, i) => (
+        <div class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+          <div
+            class:list={[
+              "grid items-center gap-10 md:grid-cols-2 md:gap-16",
+              i % 2 === 1 && "md:[&>figure]:order-first",
+            ]}
+          >
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-[color:var(--color-ink-dim)]">
+                {f.eyebrow}
+              </p>
+              <h3
+                class="mt-3 text-3xl leading-tight sm:text-4xl"
+                style="font-family: var(--font-display);"
+              >
+                {f.title}
+              </h3>
+              <p class="mt-5 max-w-md text-lg text-[color:var(--color-ink-dim)]">
+                {f.body}
+              </p>
+            </div>
+            <figure class="relative flex justify-center">
+              <div
+                class="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-72 w-72 -translate-y-1/2 rounded-full opacity-70 blur-[90px]"
+                style="background: radial-gradient(closest-side, rgba(224,184,88,0.16), transparent 72%);"
+                aria-hidden="true"
+              >
+              </div>
+              <img
+                src={f.img}
+                alt={f.title}
+                width="280"
+                loading="lazy"
+                class="relative w-[230px] rounded-[2.2rem] border border-white/10 shadow-[0_30px_90px_-25px_rgba(0,0,0,0.8)] sm:w-[270px]"
+              />
+            </figure>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <!-- Band 2: Everything you loved -->
+  <section class="border-t border-white/5 pt-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <p
+        class="text-xs uppercase tracking-[0.28em] text-[color:var(--color-accent)]"
+      >
+        Everything you loved
+      </p>
+    </div>
+    {
+      life.map((f, i) => (
+        <div class="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+          <div
+            class:list={[
+              "grid items-center gap-10 md:grid-cols-2 md:gap-16",
+              i % 2 === 1 && "md:[&>figure]:order-first",
+            ]}
+          >
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-[color:var(--color-ink-dim)]">
+                {f.eyebrow}
+              </p>
+              <h3
+                class="mt-3 text-3xl leading-tight sm:text-4xl"
+                style="font-family: var(--font-display);"
+              >
+                {f.title}
+              </h3>
+              <p class="mt-5 max-w-md text-lg text-[color:var(--color-ink-dim)]">
+                {f.body}
+              </p>
+            </div>
+            <figure class="relative flex justify-center">
+              <div
+                class="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-72 w-72 -translate-y-1/2 rounded-full opacity-70 blur-[90px]"
+                style="background: radial-gradient(closest-side, rgba(224,184,88,0.16), transparent 72%);"
+                aria-hidden="true"
+              >
+              </div>
+              <img
+                src={f.img}
+                alt={f.title}
+                width="280"
+                loading="lazy"
+                class="relative w-[230px] rounded-[2.2rem] border border-white/10 shadow-[0_30px_90px_-25px_rgba(0,0,0,0.8)] sm:w-[270px]"
+              />
+            </figure>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <!-- Privacy -->
+  <section class="border-t border-white/5 py-24">
+    <div class="mx-auto max-w-4xl px-6">
+      <h2 class="text-3xl sm:text-5xl" style="font-family: var(--font-display);">
+        Private by design.
+      </h2>
+      <p class="mt-5 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
+        Your whole life is on this timeline — so none of it leaves your phone.
+      </p>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        <div class="rounded-2xl border border-white/5 bg-[color:var(--color-bg-soft)] p-6">
+          <h3 class="text-lg text-[color:var(--color-ink)]">On-device matching</h3>
+          <p class="mt-2 text-[color:var(--color-ink-dim)]">
+            Photos, music and health data are correlated locally — never uploaded.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-white/5 bg-[color:var(--color-bg-soft)] p-6">
+          <h3 class="text-lg text-[color:var(--color-ink)]">Keychain-only tokens</h3>
+          <p class="mt-2 text-[color:var(--color-ink-dim)]">
+            Every third-party OAuth token stays in the iOS Keychain on your device.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-white/5 bg-[color:var(--color-bg-soft)] p-6">
+          <h3 class="text-lg text-[color:var(--color-ink)]">No tracking</h3>
+          <p class="mt-2 text-[color:var(--color-ink-dim)]">
+            No analytics SDKs, no advertising identifier, no third-party trackers.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-white/5 bg-[color:var(--color-bg-soft)] p-6">
+          <h3 class="text-lg text-[color:var(--color-ink)]">You're in control</h3>
+          <p class="mt-2 text-[color:var(--color-ink-dim)]">
+            Disconnect any service or delete its imported history anytime.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="border-t border-white/5 py-20">
-    <h2 class="text-3xl sm:text-4xl" style="font-family: var(--font-display);">
-      Private by design.
-    </h2>
-    <ul class="mt-8 space-y-3 text-[color:var(--color-ink-dim)]">
-      <li>
-        <span class="text-[color:var(--color-ink)]">On-device matching.</span>
-        Photos, music, and health data are correlated locally — never uploaded.
-      </li>
-      <li>
-        <span class="text-[color:var(--color-ink)]">Keychain-only tokens.</span>
-        Every third-party OAuth token stays in the iOS Keychain on your device.
-      </li>
-      <li>
-        <span class="text-[color:var(--color-ink)]">No tracking.</span>
-        No analytics SDKs, no advertising identifier, no third-party trackers.
-      </li>
-      <li>
-        <span class="text-[color:var(--color-ink)]">You're in control.</span>
-        Disconnect any service or delete its imported history anytime in
-        Settings → Integrations.
-      </li>
-    </ul>
+  <!-- Closing CTA -->
+  <section class="border-t border-white/5 py-28">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <h2
+        class="text-4xl leading-tight sm:text-6xl"
+        style="font-family: var(--font-display);"
+      >
+        Relive it all.
+      </h2>
+      <div class="mt-10">
+        <a
+          href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20TestFlight"
+          class="rounded-full bg-[color:var(--color-accent)] px-8 py-3.5 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
+        >
+          Request TestFlight access
+        </a>
+      </div>
+    </div>
   </section>
 </Layout>
