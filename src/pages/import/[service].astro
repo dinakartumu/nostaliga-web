@@ -42,6 +42,35 @@ export function getStaticPaths() {
       settingsURL: "https://www.spotify.com/account/privacy",
       settingsLabel: "Open Spotify Privacy Settings",
     },
+    "apple-music": {
+      name: "Apple Music",
+      intro:
+        "Import your complete Apple Music listening history from your Apple Data & Privacy export.",
+      steps: [
+        {
+          text: "Open privacy.apple.com and sign in with your Apple Account.",
+          img: null,
+        },
+        {
+          text: "Under “Get a copy of your data”, tick Apple Media Services information, then tap Continue.",
+          img: null,
+        },
+        {
+          text: "Choose a maximum file size and tap Complete request. Apple prepares your data — this can take up to 7 days.",
+          img: null,
+        },
+        {
+          text: "When Apple emails you that it's ready, download and unzip the archive.",
+          img: null,
+        },
+        {
+          text: "In Nostaliga, open Settings → Apple Music, tap Import Play History, and choose the unzipped folder (your listening history lives in “Apple Music Activity”).",
+          img: null,
+        },
+      ],
+      settingsURL: "https://privacy.apple.com",
+      settingsLabel: "Open Apple Data & Privacy",
+    },
     instagram: {
       name: "Instagram",
       intro: null,
