@@ -1,0 +1,76 @@
+---
+// Launch notify form. Posts to the same-origin /api/notify function, which
+// emails the signup on (there is no database in this project).
+//
+// Used in two places on the home page, so every instance needs its own ids —
+// pass a unique `id`. Progressive enhancement: without JS the form still
+// submits normally to /api/notify, which returns JSON rather than a page, so
+// the JS path is the real one; the markup stays a plain <form> so password
+// managers and mobile keyboards behave.
+interface Props {
+  id: string;
+  /** Rendered above the field. Omit for the compact hero placement. */
+  label?: string;
+  class?: string;
+}
+
+const { id, label, class: className = "" } = Astro.props;
+---
+
+<form
+  id={id}
+  data-notify-form
+  action="/api/notify"
+  method="post"
+  class={`mx-auto flex w-full max-w-md flex-col items-center gap-3 ${className}`}
+  novalidate
+>
+  {
+    label && (
+      <label
+        for={`${id}-email`}
+        class="text-sm text-[color:var(--color-ink-dim)]"
+      >
+        {label}
+      </label>
+    )
+  }
+
+  <div class="flex w-full flex-col gap-3 sm:flex-row">
+    <input
+      id={`${id}-email`}
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      inputmode="email"
+      placeholder="you@example.com"
+      aria-label={label ?? "Email address"}
+      class="min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm text-[color:var(--color-ink)] placeholder:text-[color:var(--color-ink-dim)] focus:border-white/40 focus:outline-none"
+    />
+    {/* Honeypot — hidden from people, tempting to bots. */}
+    <input
+      type="text"
+      name="company"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="absolute left-[-9999px] h-0 w-0 opacity-0"
+    />
+    <button
+      type="submit"
+      data-notify-submit
+      class="cursor-pointer rounded-full bg-[color:var(--color-accent)] px-7 py-3 text-sm font-medium text-[color:var(--color-bg)] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      Notify me
+    </button>
+  </div>
+
+  <p
+    data-notify-status
+    role="status"
+    aria-live="polite"
+    class="min-h-[1.25rem] text-sm text-[color:var(--color-ink-dim)]"
+  >
+  </p>
+</form>
