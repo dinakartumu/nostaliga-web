@@ -1,0 +1,236 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Press kit / launch one-pager. Everything a writer needs without emailing
+// first: boilerplate they can paste, fast facts, and downloadable assets.
+const facts = [
+  ["App name", "Nostaliga"],
+  ["Tagline", "A timeline of your memories"],
+  ["Developer", "Dinakar Tumu (independent)"],
+  ["Price", "Free — no subscription, no in-app purchases, no ads"],
+  ["Platforms", "iPhone and iPad"],
+  ["Requires", "iOS 26 or later"],
+  ["Category", "Lifestyle (primary) · Music (secondary)"],
+  ["Availability", "Coming soon to the App Store"],
+  ["Website", "nostaliga.app"],
+  ["Contact", "dinakartumu@gmail.com"],
+];
+
+const features = [
+  {
+    title: "Your listening history, as a timeline",
+    body: "Connect Apple Music, Spotify, or Last.fm and every track you've played is placed back on the day you played it — with album art, artist, and how long you spent listening.",
+  },
+  {
+    title: "Photos matched on the device",
+    body: "Nostaliga lines up your photo library with the music and moments around it. The matching runs locally; no photo is ever uploaded.",
+  },
+  {
+    title: "Workouts, places, and posts",
+    body: "Strava routes, HealthKit workouts, Swarm check-ins, Trakt watches, and imported Twitter/X, Instagram and Facebook archives all land on the same timeline.",
+  },
+  {
+    title: "On This Day",
+    body: "Open today's date and see the same day across every previous year — the songs, the photos, the places, together.",
+  },
+];
+
+const shots = [
+  ["/screenshots/now-playing.jpg", "Now playing, with the memory attached to it"],
+  ["/screenshots/photos.jpg", "Photos matched to the music around them"],
+  ["/screenshots/on-this-day.jpg", "On This Day, across previous years"],
+  ["/screenshots/activity.jpg", "Workouts and activity on the timeline"],
+  ["/screenshots/places.jpg", "Check-ins and routes mapped to each memory"],
+  ["/screenshots/social.jpg", "Imported posts threaded into their day"],
+];
+---
+
+<Layout
+  title="Press — Nostaliga"
+  description="Press kit for Nostaliga: boilerplate, fast facts, screenshots, and brand assets."
+  path="/press"
+>
+  <article class="pt-16">
+    <h1 class="text-4xl sm:text-5xl" style="font-family: var(--font-display);">
+      Press kit
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-[color:var(--color-ink-dim)]">
+      Everything you need to write about Nostaliga. Copy anything on this page —
+      no permission needed. For anything missing, or a build to try before
+      release, email <a href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20press"
+        >dinakartumu@gmail.com</a
+      >.
+    </p>
+
+    <!-- Fast facts -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Fast facts
+    </h2>
+    <dl
+      class="mt-6 divide-y divide-white/5 rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] px-6"
+    >
+      {
+        facts.map(([k, v]) => (
+          <div class="flex flex-col gap-1 py-4 sm:flex-row sm:gap-6">
+            <dt class="w-40 shrink-0 text-sm text-[color:var(--color-ink-dim)]">
+              {k}
+            </dt>
+            <dd class="text-[color:var(--color-ink)]">{v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Boilerplate -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Boilerplate
+    </h2>
+    <p class="mt-6 text-sm text-[color:var(--color-ink-dim)]">
+      One line, for a roundup:
+    </p>
+    <blockquote
+      class="mt-3 rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6 text-[color:var(--color-ink)]"
+    >
+      Nostaliga is a private memory timeline for iPhone and iPad that rebuilds
+      your past around the music you were listening to at the time.
+    </blockquote>
+
+    <p class="mt-8 text-sm text-[color:var(--color-ink-dim)]">
+      A paragraph, for a review:
+    </p>
+    <blockquote
+      class="mt-3 rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6 text-[color:var(--color-ink)]"
+    >
+      Nostaliga starts with every song you have ever played and rebuilds your
+      life around it. Connect the services you already use — Apple Music,
+      Spotify, Last.fm, Strava, HealthKit, Swarm, Trakt, Adobe Lightroom — or
+      import a data archive, and the app assembles one scrollable timeline:
+      open any day and see the photos you took, the workouts you did, and the
+      places you went, alongside the exact songs that were playing. There is no
+      Nostaliga account, no server, and no analytics. Every correlation happens
+      on the device, and the data never leaves it.
+    </blockquote>
+
+    <!-- The angle -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      What makes it different
+    </h2>
+    <p class="mt-6 max-w-2xl text-[color:var(--color-ink-dim)]">
+      Most apps that assemble your personal history do it on their servers.
+      Nostaliga does not have servers to do it on.
+    </p>
+    <ul class="mt-6 space-y-3 text-[color:var(--color-ink-dim)]">
+      <li>
+        <strong class="text-[color:var(--color-ink)]">No account.</strong> There
+        is no sign-up, no profile, and no password. You open the app and connect
+        the services you already have.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">No analytics, no
+          trackers.</strong> No analytics SDK, no crash-reporting SDK, no
+        advertising identifier. The App Store privacy label reads "Data Not
+        Collected."
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">On-device matching.</strong>
+        Photos are matched to music and moments locally. Nothing is uploaded.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Your keys stay yours.</strong>
+        Connection tokens live only in the iOS Keychain, and one action in
+        Settings erases the local database, tokens, and caches.
+      </li>
+    </ul>
+
+    <!-- Features -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Features
+    </h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      {
+        features.map((f) => (
+          <div class="rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6">
+            <h3 class="text-lg text-[color:var(--color-ink)]">{f.title}</h3>
+            <p class="mt-2 text-sm text-[color:var(--color-ink-dim)]">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Screenshots -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Screenshots
+    </h2>
+    <p class="mt-6 text-[color:var(--color-ink-dim)]">
+      Free to use in any coverage of Nostaliga. Click one to open the full-size
+      file.
+    </p>
+    <div class="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3">
+      {
+        shots.map(([src, alt]) => (
+          <figure>
+            <a href={src} target="_blank" rel="noopener">
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                class="w-full rounded-2xl border border-white/10"
+              />
+            </a>
+            <figcaption class="mt-2 text-xs text-[color:var(--color-ink-dim)]">
+              {alt}
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <!-- Brand assets -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Brand assets
+    </h2>
+    <div
+      class="mt-6 flex flex-wrap items-center gap-6 rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6"
+    >
+      <img
+        src="/icons/icon-512.png"
+        alt="The Nostaliga app icon"
+        width="96"
+        height="96"
+        class="rounded-[1.4rem]"
+      />
+      <div class="text-sm text-[color:var(--color-ink-dim)]">
+        <p>
+          App icon: <a href="/icons/icon-512.png" target="_blank" rel="noopener"
+            >512&nbsp;px</a
+          >
+          · <a href="/icons/icon-192.png" target="_blank" rel="noopener"
+            >192&nbsp;px</a
+          >
+        </p>
+        <p class="mt-2">
+          Social card: <a href="/icons/og-image.png" target="_blank" rel="noopener"
+            >og-image.png</a
+          >
+        </p>
+        <p class="mt-3">
+          The name is written <strong class="text-[color:var(--color-ink)]"
+            >Nostaliga</strong
+          > — one word, capital N. Please don't restyle or recolour the icon.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <h2 class="mt-16 text-2xl" style="font-family: var(--font-display);">
+      Contact
+    </h2>
+    <p class="mt-6 max-w-2xl text-[color:var(--color-ink-dim)]">
+      Nostaliga is made by one person. Questions, interview requests, and
+      pre-release builds:
+      <a href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20press"
+        >dinakartumu@gmail.com</a
+      >. Replies usually within two business days.
+    </p>
+  </article>
+</Layout>
