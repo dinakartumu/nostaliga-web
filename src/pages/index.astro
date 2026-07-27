@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import NotifyForm from "../components/NotifyForm.astro";
 
 // Feature screenshots live in public/screenshots/ (generated from fixture mode).
 const memories = [
@@ -79,13 +80,8 @@ const life = [
         life around it — the photos, workouts, places and posts from each
         moment, on one timeline that never leaves your phone.
       </p>
-      <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a
-          href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20TestFlight"
-          class="rounded-full bg-[color:var(--color-accent)] px-7 py-3 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
-        >
-          Request TestFlight access
-        </a>
+      <div class="mt-10 flex flex-col items-center gap-5">
+        <NotifyForm id="notify-hero" />
         <button
           type="button"
           data-how-open
@@ -365,17 +361,66 @@ const life = [
         Relive it all.
       </h2>
       <div class="mt-10">
-        <a
-          href="mailto:dinakartumu@gmail.com?subject=Nostaliga%20TestFlight"
-          class="rounded-full bg-[color:var(--color-accent)] px-8 py-3.5 text-sm font-medium text-[color:var(--color-bg)] hover:no-underline hover:brightness-110"
-        >
-          Request TestFlight access
-        </a>
+        <NotifyForm
+          id="notify-closing"
+          label="Get an email the day it lands on the App Store."
+        />
       </div>
     </div>
   </section>
 
   <script is:inline>
+    // Notify form: POST the email to the same-origin function and report back
+    // in place. Every form on the page is wired independently.
+    (() => {
+      document.querySelectorAll("[data-notify-form]").forEach((form) => {
+        const status = form.querySelector("[data-notify-status]");
+        const submit = form.querySelector("[data-notify-submit]");
+        const field = form.querySelector('input[name="email"]');
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const email = (field?.value || "").trim();
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+            status.textContent = "Enter a valid email address.";
+            field?.focus();
+            return;
+          }
+
+          submit.disabled = true;
+          status.textContent = "Adding you…";
+
+          try {
+            const response = await fetch("/api/notify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email,
+                company: form.querySelector('input[name="company"]')?.value || "",
+              }),
+            });
+
+            if (response.ok) {
+              // Replace the whole form so there's nothing left to resubmit.
+              form.innerHTML =
+                '<p class="text-sm text-[color:var(--color-ink)]">' +
+                "You're on the list. We'll email you when Nostaliga launches." +
+                "</p>";
+              return;
+            }
+
+            const data = await response.json().catch(() => ({}));
+            status.textContent = data.error || "Something went wrong. Try again?";
+            submit.disabled = false;
+          } catch {
+            status.textContent = "Network error. Try again?";
+            submit.disabled = false;
+          }
+        });
+      });
+    })();
+
     (() => {
       const modal = document.getElementById("how-it-works-modal");
       if (!modal) return;
