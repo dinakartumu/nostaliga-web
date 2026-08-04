@@ -61,23 +61,40 @@ import Layout from "../layouts/Layout.astro";
         </h3>
         <p class="mt-2">
           Music and activity services connect via their official OAuth flow:
-          Spotify, Last.fm, Trakt, Swarm (Foursquare), Strava, and Adobe
-          Lightroom. With your permission, Nostaliga also reads Apple Music,
-          Photos, HealthKit, and Calendar on-device. Twitter / X, Instagram,
-          and Facebook are added by importing the data archive you download from
-          each service.
+          Last.fm, Trakt, Swarm (Foursquare), Strava, and Adobe Lightroom.
+          With your permission, Nostaliga also reads Apple Music, Photos,
+          HealthKit, and Calendar on-device. Spotify listening arrives through
+          Last.fm scrobbling (live) or Spotify's data export (full history) —
+          see the Spotify question below. Twitter / X, Instagram, and Facebook
+          are added by importing the data archive you download from each
+          service.
         </p>
       </div>
 
       <div>
         <h3 class="text-lg text-[color:var(--color-ink)]">
-          How do I connect Spotify / Last.fm / Trakt / Swarm / Strava /
-          Lightroom?
+          How do I connect Last.fm / Trakt / Swarm / Strava / Lightroom?
         </h3>
         <p class="mt-2">
           Open Settings → Integrations, tap the service, and follow the OAuth
           flow. You'll be redirected back to Nostaliga once you authorize. A
           green check appears next to the service when connection is complete.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-lg text-[color:var(--color-ink)]">
+          How do I see my Spotify listening?
+        </h3>
+        <p class="mt-2">
+          Spotify doesn't offer a direct connection. For live listening,
+          connect Last.fm in Nostaliga and link Spotify to your Last.fm
+          account at
+          <a href="https://www.last.fm/settings/applications"
+            >last.fm/settings/applications</a
+          > — new plays then scrobble to your timeline automatically. For
+          everything older, <a href="/import/spotify">import Spotify's
+          Extended Streaming History export</a>.
         </p>
       </div>
 
@@ -138,7 +155,7 @@ import Layout from "../layouts/Layout.astro";
           Only when you explicitly ask Nostaliga to fetch history from a
           third-party service you connected — those requests go directly from
           your device to that service. Matching, correlation, and rendering all
-          happen locally. Connecting Spotify, Strava, Trakt, or Swarm also
+          happen locally. Connecting Strava, Trakt, or Swarm also
           relays a short-lived OAuth code through a stateless token-swap endpoint
           so app secrets never ship in the app. See the
           <a href="/privacy">Privacy Policy</a> for the full breakdown.
@@ -169,7 +186,7 @@ import Layout from "../layouts/Layout.astro";
           connected service and delete its imported history under
           Settings → Integrations, then uninstall the app. To cut off
           Nostaliga's access to a third-party service from that service's side,
-          visit the connected-apps settings on their site (Spotify Apps, Strava
+          visit the connected-apps settings on their site (Last.fm Applications, Strava
           My Apps, etc.) and revoke Nostaliga.
         </p>
       </div>
