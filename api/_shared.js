@@ -7,11 +7,6 @@ import crypto from "node:crypto";
 // --- Configuration ------------------------------------------------------
 
 export const config = {
-  spotify: {
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    clientCallbackUrl: process.env.SPOTIFY_CLIENT_CALLBACK_URL,
-  },
   strava: {
     clientId: process.env.STRAVA_CLIENT_ID,
     clientSecret: process.env.STRAVA_CLIENT_SECRET,
@@ -45,15 +40,6 @@ export const config = {
   appProxySecret: process.env.APP_PROXY_SECRET,
   encryptionSecret: process.env.ENCRYPTION_SECRET,
 };
-
-export function requireSpotifyConfig(res) {
-  const { clientId, clientSecret, clientCallbackUrl } = config.spotify;
-  if (!clientId || !clientSecret || !clientCallbackUrl) {
-    res.status(500).json({ error: "Spotify is not configured on the server." });
-    return false;
-  }
-  return true;
-}
 
 export function requireStravaConfig(res) {
   const { clientId, clientSecret } = config.strava;
@@ -168,7 +154,7 @@ export function decrypt(text) {
 
 // Encrypt the refresh_token field on an upstream token response in place, when
 // ENCRYPTION_SECRET is configured. No-op otherwise. Used so every provider
-// stores an opaque refresh_token on the device, matching the Spotify flow.
+// stores an opaque refresh_token on the device.
 export function encryptRefreshTokenInPlace(data) {
   if (data && data.refresh_token && config.encryptionSecret) {
     data.refresh_token = encrypt(data.refresh_token);
@@ -191,30 +177,6 @@ export function decryptRefreshToken(token) {
 // fetch sends none, unlike on-device URLSession), returning an HTML block page
 // that breaks JSON parsing. Send an identifying UA on every upstream call.
 const USER_AGENT = "Nostaliga/1.0 (+https://www.nostaliga.app)";
-
-export async function spotifyRequest(grantType, params) {
-  const credentials = Buffer.from(
-    `${config.spotify.clientId}:${config.spotify.clientSecret}`,
-  ).toString("base64");
-
-  const body = new URLSearchParams({
-    grant_type: grantType,
-    ...params,
-  });
-
-  const response = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${credentials}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": USER_AGENT,
-    },
-    body: body.toString(),
-  });
-
-  const data = await response.json();
-  return { status: response.status, data };
-}
 
 export async function stravaRequest(grantType, params) {
   const body = new URLSearchParams({

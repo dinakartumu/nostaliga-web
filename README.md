@@ -9,9 +9,6 @@ deployed to Vercel at https://nostaliga.app.
 nostaliga-web/
 ├── api/                    # Vercel serverless functions (Node 18+)
 │   ├── _shared.js          # encryption, config, upstream HTTP helpers
-│   ├── spotify/
-│   │   ├── token.js        # POST — authorization_code → tokens
-│   │   └── refresh_token.js# POST — refresh_token → access_token
 │   └── strava/
 │       ├── callback.js     # GET  — OAuth trampoline back to deep link
 │       └── token.js        # POST — code OR refresh_token exchange
@@ -44,36 +41,35 @@ See `.env.example` for a template.
 
 | Variable                       | Required          | Purpose                                                                                     |
 | ------------------------------ | ----------------- | ------------------------------------------------------------------------------------------- |
-| `SPOTIFY_CLIENT_ID`            | yes (for Spotify) | Spotify app client ID                                                                       |
-| `SPOTIFY_CLIENT_SECRET`        | yes (for Spotify) | Spotify app client secret                                                                   |
-| `SPOTIFY_CLIENT_CALLBACK_URL`  | yes (for Spotify) | Redirect URI registered in Spotify, must match iOS client                                   |
 | `STRAVA_CLIENT_ID`             | yes (for Strava)  | Strava app client ID                                                                        |
 | `STRAVA_CLIENT_SECRET`         | yes (for Strava)  | Strava app client secret                                                                    |
 | `LASTFM_API_KEY`               | yes (for Last.fm) | Last.fm API key (public; also in the app) — used to sign `auth.getSession`                  |
 | `LASTFM_SHARED_SECRET`         | yes (for Last.fm) | Last.fm shared secret — held server-side so it never ships in the app (NOS-99)              |
-| `ENCRYPTION_SECRET`            | optional          | If set, Spotify refresh tokens are aes-256-cbc encrypted before being returned to the iOS client |
+| `ENCRYPTION_SECRET`            | optional          | If set, supported provider refresh tokens are aes-256-cbc encrypted before being returned to the iOS client |
 
-Rotating `ENCRYPTION_SECRET` invalidates every Spotify refresh token already
+Rotating `ENCRYPTION_SECRET` invalidates previously encrypted refresh tokens already
 stored on users' devices, forcing them to re-authorize.
+
+The legacy Spotify token and refresh endpoints have been removed. Spotify
+history imports and Last.fm scrobbling remain supported.
 
 ## Endpoints
 
 | Method | Path                         | Description                                             |
 | ------ | ---------------------------- | ------------------------------------------------------- |
-| POST   | `/api/spotify/token`         | Exchange `code` for access + refresh tokens             |
-| POST   | `/api/spotify/refresh_token` | Exchange `refresh_token` for a fresh access token       |
 | GET    | `/api/strava/callback`       | OAuth trampoline — redirects to deep link from `state`  |
 | POST   | `/api/strava/token`          | Exchange `code` or `refresh_token` (via `grant_type`)   |
 | POST   | `/api/lastfm/session`        | Exchange a Last.fm auth `token` for a session key (signs `auth.getSession` server-side) |
 
 The server is stateless. No tokens or codes are persisted. Each request
-forwards to Spotify/Strava and streams the response back.
+forwards to the relevant provider and returns its response.
 
 ## Privacy note
 
 This service is what allows the iOS app to hold no client secret. The
-server forwards OAuth material to Spotify/Strava on the device's behalf and
-returns the result. It does not persist anything. This is disclosed on
+server forwards OAuth material to supported providers on the device's behalf
+and returns the result. Authentication handlers do not write credentials to an
+application database; hosting request logs may be retained. This is disclosed on
 `/privacy`.
 
 ## Deploy

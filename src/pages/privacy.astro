@@ -68,10 +68,9 @@ const lastUpdated = "September 9, 2026";
       Listening-history requests are then made directly to Last.fm.
     </p>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      Older builds that offered a direct Spotify connection may also use
-      <code>nostaliga.app/api/spotify/*</code> for authorization and token
-      refreshes. The public release uses Spotify history imports or Last.fm
-      scrobbles instead of a direct Spotify connection.
+      The legacy Spotify authorization and token-refresh endpoints have been
+      retired. Spotify listening is available through history imports or
+      Last.fm scrobbles instead of a direct Spotify connection.
     </p>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
       These authentication handlers process requests in memory and do not
