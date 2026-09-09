@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const lastUpdated = "June 26, 2026";
+const lastUpdated = "September 9, 2026";
 ---
 
 <Layout
   title="Privacy Policy — Nostaliga"
-  description="How Nostaliga handles your data. Short answer: it stays on your device."
+  description="How Nostaliga handles on-device memories, connected services, server requests, and your privacy controls."
   path="/privacy"
 >
   <article class="prose-nostaliga pt-16">
@@ -27,67 +27,103 @@ const lastUpdated = "June 26, 2026";
     <h2 class="mt-12 text-2xl">The short version</h2>
     <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
       <li>
-        Nostaliga has no user accounts and no database. We do not store your
-        music, photos, workouts, check-ins, or any other personal data on any
-        server.
+        There is no Nostaliga account to create. Your memory timeline and
+        imported history are stored and assembled on your device, not in a
+        Nostaliga server database. Photos from your device's library are not uploaded.
       </li>
       <li>
-        All matching, correlation, and display happens on your device.
+        Connected services receive requests for the history you choose to
+        bring in. Some authentication exchanges and movie or TV artwork
+        lookups pass through Nostaliga's servers, as explained below.
       </li>
       <li>
-        The only data that leaves your device is (a) the data you explicitly
-        ask Nostaliga to fetch from a third-party service you have connected,
-        which travels directly from your device to that service, and (b) when
-        connecting Strava, Trakt, or Swarm, a short-lived OAuth code —
-        and later token refreshes — are relayed through a stateless Nostaliga
-        token-swap endpoint (see below) so the app never has to hold those
-        services' client secrets.
+        We do not use advertising identifiers, behavioral analytics, or
+        cross-app tracking. Apple diagnostic reports are stored locally;
+        Nostaliga does not automatically upload those reports to us.
       </li>
       <li>
-        We do not use analytics, trackers, advertising identifiers, or
-        crash-reporting SDKs.
+        Our website and server endpoints are hosted by Vercel, which processes
+        network requests and infrastructure logs. If you use the website's
+        launch-notification form, we also receive the email address you submit.
       </li>
     </ul>
 
-    <h2 class="mt-12 text-2xl">Token-swap endpoint</h2>
+    <h2 class="mt-12 text-2xl">Authentication through our servers</h2>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      Strava, Trakt, and Swarm (Foursquare) require apps to hold a <em
-        >client secret</em
-      > to exchange OAuth codes for access tokens. Shipping that secret inside
-      the app binary would expose it to anyone. Instead, Nostaliga runs a thin,
-      stateless HTTPS endpoint at
+      When you connect Strava, Trakt, or Swarm (Foursquare), Nostaliga sends an
+      authorization code to an HTTPS endpoint under
       <code>nostaliga.app/api/strava/*</code>,
-      <code>nostaliga.app/api/trakt/*</code>, and
-      <code>nostaliga.app/api/foursquare/*</code> that does exactly one thing:
-      it takes a one-time <code>code</code> (or a <code>refresh_token</code>)
-      from your device, attaches the client secret server-side, forwards the
-      request to that service, and returns the response to your device. Refresh
-      tokens are encrypted before they are returned, so the copy kept on your
-      device is opaque.
+      <code>nostaliga.app/api/trakt/*</code>, or
+      <code>nostaliga.app/api/foursquare/*</code>. For services that require
+      token refreshes, refresh tokens also pass through these endpoints.
+      The server adds the service's client secret, exchanges the code or token
+      with that service, and returns the response to your device. This keeps
+      application secrets out of the app.
     </p>
-    <p class="mt-4 text-[color:var(--color-ink-dim)]">What that endpoint does <em>not</em> do:</p>
-    <ul class="mt-3 space-y-2 text-[color:var(--color-ink-dim)]">
-      <li>It does not have a database.</li>
-      <li>
-        It does not persist your code, access token, or refresh token. Each
-        request is processed in memory and the values are discarded as soon as
-        the response is returned.
-      </li>
-      <li>
-        It does not read your listening history, activities, profile, or any
-        other data — it only performs the token exchange.
-      </li>
-      <li>It does not associate requests with an identity or user record.</li>
-    </ul>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      The endpoint runs on Vercel. Vercel keeps request logs (IP address,
-      request path, status code) as part of standard infrastructure operation;
-      those logs are governed by <a
-        href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a
-      >. The full source of the endpoint is public at <a
+      Last.fm uses <code>nostaliga.app/api/lastfm/session</code>. Your temporary
+      Last.fm authorization token is sent to this endpoint, which signs a
+      session request with the Last.fm shared secret and returns Last.fm's
+      response, including your session key and username, to your device.
+      Listening-history requests are then made directly to Last.fm.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Older builds that offered a direct Spotify connection may also use
+      <code>nostaliga.app/api/spotify/*</code> for authorization and token
+      refreshes. The public release uses Spotify history imports or Last.fm
+      scrobbles instead of a direct Spotify connection.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      These authentication handlers process requests in memory and do not
+      write authorization codes, access tokens, refresh tokens, or session
+      keys to an application database. They do not fetch your memory timeline
+      or imported archives. The returned credentials are stored in your
+      device's Keychain. Hosting logs are described below.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Artwork and other network requests</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      To display posters, backdrops, and episode images alongside Trakt watch
+      history, the app sends movie or TV identifiers and, when needed, season
+      and episode numbers to <code>nostaliga.app/api/tmdb/artwork</code> or
+      <code>nostaliga.app/api/tmdb/still</code>. Our server uses these values to
+      look up artwork from The Movie Database (TMDB). These identifiers can
+      reveal which titles the app is displaying; the request does not include
+      your Trakt credentials or the full watch-history record.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      The server returns artwork URLs, and your device downloads images
+      directly from TMDB's image service. Artwork lookup responses use a
+      shared hosting cache configured for seven days, with up to one additional
+      day while revalidating. See <a
+        href="https://www.themoviedb.org/privacy-policy">TMDB's privacy policy</a>.
+      Album artwork and other remote media also require requests to the
+      relevant provider or image host, which receives ordinary network
+      information such as your IP address and the requested resource.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      Maps and Apple system services may make network requests to Apple to
+      provide map content, music information, or song recognition. Those
+      services are subject to <a href="https://www.apple.com/legal/privacy/"
+        >Apple's privacy policy</a> and your device settings.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Hosting and request logs</h2>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      The website and server endpoints run on Vercel. Requests expose network
+      information, including IP addresses and requested URLs, to the hosting
+      service. Infrastructure and error logs may include request paths,
+      parameters, response status, and diagnostic information. These logs are
+      used to operate and troubleshoot the service, not to build advertising
+      profiles. Log retention is governed by Vercel's service settings and
+      policies; it is separate from the in-memory authentication processing
+      described above. See <a
+        href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a>.
+    </p>
+    <p class="mt-4 text-[color:var(--color-ink-dim)]">
+      The server source is available at <a
         href="https://github.com/dinakartumu/nostaliga-web"
-        >github.com/dinakartumu/nostaliga-web</a
-      >.
+        >github.com/dinakartumu/nostaliga-web</a>.
     </p>
 
     <h2 class="mt-12 text-2xl">What Nostaliga accesses on your device</h2>
@@ -106,38 +142,54 @@ const lastUpdated = "June 26, 2026";
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">HealthKit data</strong>
-        (with your permission) — workouts, shown inline with your music
-        history. Nostaliga only requests workout data; it never reads steps,
-        sleep, or other health metrics. HealthKit data never leaves your device
-        and is not shared with third parties.
+        (with your permission) — workouts and their routes, shown alongside
+        your music history and on maps. Nostaliga does not request step-count
+        or sleep data. It does not upload your HealthKit records to Nostaliga's
+        servers or use them for advertising.
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">Calendar</strong>
         (with your permission) — to place events on your timeline alongside your
-        music and activities. Calendar data is read on-device and never leaves
-        it.
+        music and activities. Calendar records are read and stored on-device;
+        Nostaliga does not upload them to its servers.
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">Local storage</strong> —
-        Nostaliga keeps a SwiftData database on-device with your imported
-        history, plus small caches of album art and map snapshots.
+        Nostaliga keeps your imported history in an on-device SQLite database,
+        managed by GRDB, plus local media files, preferences, artwork caches,
+        map indexes, and widget snapshots. Stored memories remain until you
+        remove them through the available source controls or delete the app's
+        data. Device backups are governed by your Apple backup settings.
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">Keychain</strong> —
         OAuth tokens for each third-party service you connect are stored in
         the iOS Keychain, device-only, not backed up to iCloud.
       </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Microphone and song recognition</strong>
+        (with your permission) — when you start song recognition, Apple's
+        ShazamKit listens to identify music around you. Nostaliga does not
+        save an audio recording or send one to its own servers. Recognition is
+        handled by Apple's service, and the identified song can be shown in the app.
+      </li>
+      <li>
+        <strong class="text-[color:var(--color-ink)]">Diagnostics</strong> —
+        the app saves performance and diagnostic reports supplied by Apple's
+        MetricKit framework in local app storage. Nostaliga does not
+        automatically send these files to us. Apple's own diagnostic sharing
+        is controlled by your device settings.
+      </li>
     </ul>
 
     <h2 class="mt-12 text-2xl">Third-party services you can connect</h2>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      Nostaliga can read history from the following services if you choose to
-      connect them. Each connection uses that service's official OAuth flow, and
-      the token is stored only on your device. History requests are made
-      directly from your device to each service. For Strava, Trakt, and
-      Swarm, the initial OAuth token exchange (and later refreshes) passes
-      through Nostaliga's stateless token-swap endpoint described above; no other
-      requests go through an intermediary server.
+      The services below provide history or media that you choose to connect
+      or import. Account connections use the provider's authorization flow.
+      Authentication exchanges and artwork requests may use the Nostaliga
+      endpoints described above; history requests otherwise go directly from
+      your device to the relevant service. Each provider also applies its own
+      privacy policy to the requests it receives.
     </p>
     <div class="mt-6 overflow-x-auto">
       <table class="w-full text-left text-sm">
@@ -195,7 +247,9 @@ const lastUpdated = "June 26, 2026";
           </tr>
           <tr>
             <td class="py-3 pr-4 text-[color:var(--color-ink)]">Adobe Lightroom</td>
-            <td class="py-3 pr-4">Catalog, asset metadata</td>
+            <td class="py-3 pr-4">Catalog, asset metadata, and photo renditions in
+              existing or development builds; not offered for new connections
+              in the upcoming public release</td>
             <td class="py-3 pr-4"
               ><a href="https://www.adobe.com/privacy/policy.html"
                 >adobe.com</a
@@ -206,9 +260,9 @@ const lastUpdated = "June 26, 2026";
       </table>
     </div>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
-      Nostaliga never shares data it has read from one service with any other
-      service. Data from each integration is used only to build your personal
-      timeline inside the app.
+      Integration data is used to build and display your personal memories.
+      The artwork lookups described above send title identifiers to TMDB;
+      Nostaliga does not publish your timeline or provide a social feed.
     </p>
 
     <h2 class="mt-12 text-2xl">Imported archives</h2>
@@ -231,19 +285,23 @@ const lastUpdated = "June 26, 2026";
       the <strong class="text-[color:var(--color-ink)]">notify form</strong> on
       the home page. If you enter your email address there, it is sent to us so
       we can email you once — when Nostaliga is released. We do not add you to a
-      marketing list, share or sell the address, or use it for anything else,
+      marketing list, sell the address, or use it for unrelated marketing,
       and you can ask us to delete it at any time by emailing
-      <a href="mailto:dinakartumu@gmail.com">dinakartumu@gmail.com</a>. Leaving
-      the form alone means the site collects nothing from you.
+      <a href="mailto:dinakartumu@gmail.com">dinakartumu@gmail.com</a>.
+      The form sends your address through <a href="https://resend.com/legal/privacy-policy"
+        >Resend</a> to our notification inbox, where it is retained so we can
+      send the launch notice or handle your deletion request. Resend and our
+      email provider process that message to deliver and store it. The website
+      also loads fonts from Google Fonts, which receives the corresponding
+      network requests; see <a href="https://policies.google.com/privacy"
+        >Google's privacy policy</a>. Hosting requests and logs apply even if
+      you do not use the form.
     </p>
 
     <h2 class="mt-12 text-2xl">What we do not do</h2>
     <ul class="mt-4 space-y-2 text-[color:var(--color-ink-dim)]">
-      <li>No analytics SDK, no crash-reporting SDK, no advertising SDK.</li>
-      <li>
-        No collection of your IP address by the app on a Nostaliga-controlled
-        server.
-      </li>
+      <li>No behavioral analytics or advertising SDK.</li>
+      <li>No automatic upload of the app's local MetricKit reports to Nostaliga.</li>
       <li>No advertising identifier (IDFA) is read or requested.</li>
       <li>No "tracking" in the sense defined by Apple's App Tracking
         Transparency framework.</li>
@@ -255,20 +313,21 @@ const lastUpdated = "June 26, 2026";
       <li>
         <strong class="text-[color:var(--color-ink)]">Disconnect a service</strong>
         at any time from Settings → Integrations. The OAuth token is removed
-        from Keychain. You may also optionally keep or delete history stored
-        locally for that service.
+        from Keychain. History-deletion behavior and available controls vary
+        by source; the app's confirmation explains what will be removed.
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">Remove all data</strong> —
-        Nostaliga stores data per integration, so there is no single "delete
-        all" button. Disconnect each service and use its "Delete Imported
-        History" option (both under Settings → Integrations) to clear local
-        data, then delete the app to remove the on-device database and caches.
+        use the disconnect and imported-history deletion controls available
+        for each source in Settings. There is no single erase-all control.
+        Disconnect accounts before deleting the app to remove their Keychain
+        credentials; deleting the app removes its local database and caches,
+        but Keychain entries can survive app deletion. Copies in device
+        backups are managed through your Apple backup settings.
       </li>
       <li>
         <strong class="text-[color:var(--color-ink)]">Revoke server-side access</strong>
-        at each connected service's website (e.g., Spotify → Apps, Strava →
-        My Apps). Disconnecting in Nostaliga removes the local token;
+        at each connected service's website (for example, Strava → My Apps). Disconnecting in Nostaliga removes the local token;
         revoking on the service's site invalidates it globally.
       </li>
     </ul>
@@ -276,8 +335,8 @@ const lastUpdated = "June 26, 2026";
     <h2 class="mt-12 text-2xl">Changes to this policy</h2>
     <p class="mt-4 text-[color:var(--color-ink-dim)]">
       We will post the updated policy on this page and revise the "Last
-      updated" date above. Material changes will be surfaced inside the app on
-      your next launch.
+      updated" date above. The current policy is accessible from the app's
+      Settings and this website.
     </p>
 
     <h2 class="mt-12 text-2xl">Contact</h2>
