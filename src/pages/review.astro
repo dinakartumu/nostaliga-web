@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+const archives = [
+  { name: "Twitter", file: "twitter.zip", folder: "Nostaliga-Review-Twitter", detail: "8 photo tweets selected from a 2022 archive", size: "2.8 MB" },
+  { name: "Instagram", file: "instagram.zip", folder: "Nostaliga-Review-Instagram", detail: "8 food photos, with no visible faces", size: "1.5 MB" },
+  { name: "Facebook", file: "facebook.zip", folder: "Nostaliga-Demo-Facebook", detail: "8 sample photo posts", size: "0.3 MB" },
+];
+---
+<Layout title="Review samples — Nostaliga" description="Sample archives and import instructions for reviewing Nostaliga." path="/review" noindex>
+  <article class="pt-12 sm:pt-16">
+    <p class="text-sm text-[color:var(--color-ink-dim)]">APP REVIEW · SEPTEMBER 2026</p>
+    <h1 class="mt-4 text-4xl sm:text-5xl" style="font-family: var(--font-display);">A few memories to explore</h1>
+    <p class="mt-6 max-w-2xl text-[color:var(--color-ink-dim)]">Import these small archives to try Nostaliga’s social timeline with photos and posts. You don’t need a Twitter, Instagram, or Facebook account to import them.</p>
+    <div class="mt-10 grid gap-4 sm:grid-cols-3">
+      {archives.map((archive) => (
+        <section class="flex flex-col rounded-2xl border border-white/10 bg-[color:var(--color-bg-soft)] p-6">
+          <h2 class="text-xl">{archive.name}</h2>
+          <p class="mt-3 flex-1 text-sm text-[color:var(--color-ink-dim)]">{archive.detail}.</p>
+          <a href={`/review-downloads/${archive.file}`} download class="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 px-4 py-3 text-sm">Download {archive.name} ZIP</a>
+        </section>
+      ))}
+    </div>
+    <section class="mt-12">
+      <h2 class="text-2xl" style="font-family: var(--font-display);">Import on iPhone or iPad</h2>
+      <ol class="mt-5 list-decimal space-y-4 pl-6 text-[color:var(--color-ink-dim)]">
+        <li>Download an archive above. Open it in Files and tap the ZIP to extract it.</li>
+        <li>Make sure the extracted folder and its photos are downloaded to your device.</li>
+        <li>Open Nostaliga → Settings, select the corresponding social source, and start the archive import.</li>
+        <li>Select the extracted folder itself, rather than the ZIP or a file inside it. For Twitter, enable copying media if offered.</li>
+        <li>Wait for the import to finish, then explore the timeline and search.</li>
+      </ol>
+      <p class="mt-5 text-sm text-[color:var(--color-ink-dim)]">Folder names:</p>
+      <ul class="mt-2 space-y-2 text-sm break-words">{archives.map((a) => <li>{a.folder}</li>)}</ul>
+    </section>
+    <section class="mt-12 rounded-2xl border border-white/10 p-6">
+      <h2 class="text-2xl" style="font-family: var(--font-display);">Explore a day through a song</h2>
+      <p class="mt-4 text-[color:var(--color-ink-dim)]">For the combined music and activity experience, connect the Last.fm and Strava test accounts supplied in the private App Review notes and let them finish syncing.</p>
+      <ul class="mt-4 list-disc space-y-3 pl-5">
+        <li><strong>Dreams — Fleetwood Mac:</strong> look for September 3, 2026, alongside Mission District Spin.</li>
+        <li><strong>Blank Space — Taylor Swift:</strong> look for September 5, 2026, alongside Little Yosemite Hike.</li>
+      </ul>
+      <p class="mt-4 text-[color:var(--color-ink-dim)]">Search for the song in Nostaliga, or play it in Apple Music and open Now Playing. Original Twitter and Instagram captions may not mention the song or activity.</p>
+    </section>
+    <section class="mt-12 text-sm text-[color:var(--color-ink-dim)]">
+      <h2 class="text-xl text-[color:var(--color-ink)]">About these samples</h2>
+      <p class="mt-4">Twitter and Instagram contain selected real posts and photos provided by the developer. Their dates in these review copies have been shifted to September 3–10, 2026 to match the test listening sessions. The photos do not necessarily depict the matched activity locations. Facebook posts are fictional samples.</p>
+      <p class="mt-3">These archives exercise the normal import flow and add entries to the app’s local history. Dates display in your device’s timezone. Recent sample dates are intended for the timeline and search; they do not populate past-year On This Day memories.</p>
+      <p class="mt-3">Use the Twitter and Instagram downloads here instead of earlier synthetic samples. No account passwords are included in these downloads.</p>
+    </section>
+  </article>
+</Layout>
