@@ -30,8 +30,17 @@ export default async function handler(req, res) {
     return;
   }
 
+  // Older builds omit state. New builds bind authorization to a nonce in
+  // redirect_uri; only accept a UUID, never a client-supplied redirect URL.
+  const state = body.state;
+  if (state !== undefined && (typeof state !== "string" ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(state))) {
+    res.status(400).json({ error: "invalid state" });
+    return;
+  }
+
   try {
-    const { status, data } = await foursquareRequest(code);
+    const { status, data } = await foursquareRequest(code, state);
     res.status(status).json(data);
   } catch (err) {
     res.status(500).json({ error: err?.message || String(err) });
