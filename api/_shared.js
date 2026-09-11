@@ -225,12 +225,14 @@ export async function traktRequest(grantType, params) {
 
 // Foursquare v2 has no PKCE and no refresh — access tokens don't expire, so
 // only the authorization_code exchange needs proxying. Returns { access_token }.
-export async function foursquareRequest(code) {
+export async function foursquareRequest(code, state) {
+  const redirect = new URL(config.foursquare.redirectUri);
+  if (state !== undefined) redirect.searchParams.set("state", state);
   const body = new URLSearchParams({
     client_id: config.foursquare.clientId,
     client_secret: config.foursquare.clientSecret,
     grant_type: "authorization_code",
-    redirect_uri: config.foursquare.redirectUri,
+    redirect_uri: state === undefined ? config.foursquare.redirectUri : redirect.toString(),
     code,
   });
 
