@@ -6,6 +6,7 @@ interface Props {
   description?: string;
   path?: string;
   wide?: boolean;
+  noindex?: boolean;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   description = "Nostaliga reconstructs your personal history — music, workouts, photos, and check-ins — on a single timeline. Everything stays on your device.",
   path = "/",
   wide = false,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site ?? "https://nostaliga.app");
@@ -27,6 +29,7 @@ const year = new Date().getFullYear();
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
