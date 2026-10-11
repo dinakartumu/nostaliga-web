@@ -1,0 +1,25 @@
+---
+// Apple's official "Download on the App Store" badge, linking to the listing.
+// Apple's guidelines: use the artwork unmodified and no shorter than 40px.
+export const APP_STORE_ID = "6763638691";
+export const APP_STORE_URL = `https://apps.apple.com/app/nostaliga/id${APP_STORE_ID}`;
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<a
+  href={APP_STORE_URL}
+  class={`inline-block transition-opacity hover:opacity-80 ${className}`}
+>
+  <img
+    src="/app-store-badge.svg"
+    alt="Download on the App Store"
+    width="150"
+    height="50"
+    class="h-[50px] w-auto"
+  />
+</a>
